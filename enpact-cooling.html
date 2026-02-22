@@ -127,10 +127,28 @@ section{position:relative;z-index:1;padding:100px 0}
 .phase-progress{height:3px;background:rgba(255,255,255,.04);border-radius:2px;margin-top:32px;overflow:hidden}
 .phase-progress-fill{height:100%;background:var(--acc);border-radius:2px;width:0%}
 
+/* ENHANCED SCHEMATIC */
+.ors-layout-full{display:grid;grid-template-columns:1fr;gap:48px}
+.ors-visual-full{width:100%;max-width:880px;margin:0 auto;position:relative}
+.schematic-svg{width:100%;height:auto;display:block}
+.pipe-animated{transition:opacity .6s ease, stroke .6s ease}
+.pipe-animated.stopped{animation:none!important}
+.pipe-animated.stopped animate{animation-play-state:paused}
+.sensor-badge{transition:opacity .4s}
+.sensor-badge.pulse rect{animation:sensor-pulse 1.5s ease-in-out infinite}
+@keyframes sensor-pulse{0%,100%{stroke-opacity:.3;fill-opacity:.1}50%{stroke-opacity:.8;fill-opacity:.3}}
+
+/* Phase info panel - full width below diagram */
+.ors-info-full{display:grid;grid-template-columns:1fr 1fr;gap:24px;max-width:880px;margin:0 auto}
+.ors-info-full .phase-insight{grid-column:1/-1;margin-bottom:0}
+.ors-info-full .phase-cards{grid-column:1/-1;display:grid;grid-template-columns:repeat(4,1fr);gap:14px}
+.ors-info-full .phase-progress{grid-column:1/-1}
+
 /* Responsive */
 @media(max-width:1024px){
   .ors-layout{grid-template-columns:1fr;gap:48px}
   .ors-visual{max-width:500px;margin:0 auto}
+  .ors-info-full .phase-cards{grid-template-columns:1fr 1fr}
 }
 
 /* HOW IT WORKS - TECHNICAL */
@@ -341,6 +359,9 @@ footer{background:var(--bg);border-top:1px solid var(--brd);padding:48px 0 24px}
   .specs-grid{grid-template-columns:1fr}
   .ind-grid{grid-template-columns:1fr 1fr}
   .footer-inner{flex-direction:column;gap:12px;text-align:center}
+  .ors-info-full .phase-cards{grid-template-columns:1fr}
+  .ors-visual-full{overflow-x:auto;-webkit-overflow-scrolling:touch}
+  .schematic-svg{min-width:600px}
 }
 </style>
 </head>
@@ -416,61 +437,223 @@ footer{background:var(--bg);border-top:1px solid var(--brd);padding:48px 0 24px}
     <div class="section-tag"><span class="line"></span> The Core Innovation</div>
     <h2 class="section-title">Optimised Refrigerant Supply</h2>
     <p class="section-sub">Standard thermostats only monitor room temperature — causing compressors to run far longer than necessary. enPact monitors the <strong style="color:var(--t1)">superheat</strong> at the evaporator to optimise every compressor cycle.</p>
-    <div class="ors-layout">
-      <!-- Animated diagram -->
-      <div class="ors-visual">
-        <!-- SVG pipes connecting the components -->
-        <svg class="ors-svg" viewBox="0 0 500 450" preserveAspectRatio="xMidYMid meet">
-          <!-- Top pipe: evaporator → solenoid (coolant out) -->
-          <path class="pipe-bg" d="M165 110 L250 110 L250 195"/>
-          <path class="pipe-flow flowing" id="pipe-top" d="M165 110 L250 110 L250 195"/>
-          <!-- Bottom pipe: solenoid → compressor (return) -->
-          <path class="pipe-bg" d="M250 255 L250 340 L335 340"/>
-          <path class="pipe-flow flowing" id="pipe-bottom" d="M250 255 L250 340 L335 340"/>
-          <!-- Right pipe: compressor → evaporator (supply) -->
-          <path class="pipe-bg" d="M335 300 L430 300 L430 50 L95 50 L95 110"/>
-          <path class="pipe-flow flowing" id="pipe-return" d="M335 300 L430 300 L430 50 L95 50 L95 110"/>
+    <div class="ors-layout ors-layout-full">
+      <!-- Full schematic animated diagram -->
+      <div class="ors-visual-full" id="ors-visual-full">
+        <svg viewBox="0 0 880 520" preserveAspectRatio="xMidYMid meet" class="schematic-svg" id="schematic-svg">
+          <defs>
+            <!-- Arrowhead markers -->
+            <marker id="arrow-cold" markerWidth="8" markerHeight="6" refX="7" refY="3" orient="auto"><path d="M0,0 L8,3 L0,6" fill="#38BDF8" opacity=".8"/></marker>
+            <marker id="arrow-hot" markerWidth="8" markerHeight="6" refX="7" refY="3" orient="auto"><path d="M0,0 L8,3 L0,6" fill="#F87171" opacity=".8"/></marker>
+            <marker id="arrow-liq" markerWidth="8" markerHeight="6" refX="7" refY="3" orient="auto"><path d="M0,0 L8,3 L0,6" fill="#A78BFA" opacity=".8"/></marker>
+            <marker id="arrow-gas" markerWidth="8" markerHeight="6" refX="7" refY="3" orient="auto"><path d="M0,0 L8,3 L0,6" fill="#FBBF24" opacity=".8"/></marker>
+            <marker id="arrow-acc" markerWidth="8" markerHeight="6" refX="7" refY="3" orient="auto"><path d="M0,0 L8,3 L0,6" fill="#00E676" opacity=".8"/></marker>
+            <!-- Glow filter -->
+            <filter id="glow-green"><feGaussianBlur stdDeviation="3" result="g"/><feMerge><feMergeNode in="g"/><feMergeNode in="SourceGraphic"/></feMerge></filter>
+            <filter id="glow-blue"><feGaussianBlur stdDeviation="4" result="g"/><feMerge><feMergeNode in="g"/><feMergeNode in="SourceGraphic"/></feMerge></filter>
+            <filter id="glow-red"><feGaussianBlur stdDeviation="3" result="g"/><feMerge><feMergeNode in="g"/><feMergeNode in="SourceGraphic"/></feMerge></filter>
+          </defs>
+
+          <!-- ==================== UNIT BOXES ==================== -->
+          <!-- Indoor Unit box -->
+          <rect x="30" y="60" width="360" height="340" rx="16" fill="none" stroke="rgba(56,189,248,.12)" stroke-width="1.5" stroke-dasharray="8 4" id="indoor-box"/>
+          <text x="210" y="88" text-anchor="middle" fill="#38BDF8" font-family="Urbanist,sans-serif" font-size="13" font-weight="700" letter-spacing="1">INDOOR UNIT</text>
+
+          <!-- Outdoor Unit box -->
+          <rect x="490" y="60" width="360" height="340" rx="16" fill="none" stroke="rgba(248,113,113,.12)" stroke-width="1.5" stroke-dasharray="8 4" id="outdoor-box"/>
+          <text x="670" y="88" text-anchor="middle" fill="#F87171" font-family="Urbanist,sans-serif" font-size="13" font-weight="700" letter-spacing="1">OUTDOOR UNIT</text>
+
+          <!-- ==================== REFRIGERANT PIPES (background) ==================== -->
+          <!-- Path A: Expansion Valve → Evaporator coil (cold liquid, cyan) -->
+          <path d="M230,195 L120,195 L120,240" stroke="rgba(255,255,255,.06)" stroke-width="4" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
+          <!-- Path B: Evaporator coil → Suction line out (low pressure gas, yellow) -->
+          <path d="M120,310 L120,350 L560,350" stroke="rgba(255,255,255,.06)" stroke-width="4" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
+          <!-- Path C: Compressor → Condenser coil (hot gas, red) -->
+          <path d="M620,350 L700,350 L700,310" stroke="rgba(255,255,255,.06)" stroke-width="4" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
+          <!-- Path D: Condenser coil → Liquid line → Solenoid (high pressure liquid, purple) -->
+          <path d="M700,200 L700,155 L440,155 L440,195 L330,195" stroke="rgba(255,255,255,.06)" stroke-width="4" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
+
+          <!-- ==================== REFRIGERANT PIPES (animated flow) ==================== -->
+          <!-- Path A: Expansion Valve → Evaporator (cyan) -->
+          <path d="M230,195 L120,195 L120,240" stroke="#38BDF8" stroke-width="4" fill="none" stroke-linecap="round" stroke-linejoin="round" stroke-dasharray="10 14" opacity=".9" id="pipe-a" class="pipe-animated">
+            <animate attributeName="stroke-dashoffset" from="0" to="-24" dur="0.8s" repeatCount="indefinite"/>
+          </path>
+          <!-- Path B: Evaporator → Compressor (yellow/green) -->
+          <path d="M120,310 L120,350 L560,350" stroke="#FBBF24" stroke-width="4" fill="none" stroke-linecap="round" stroke-linejoin="round" stroke-dasharray="10 14" opacity=".7" id="pipe-b" class="pipe-animated">
+            <animate attributeName="stroke-dashoffset" from="0" to="-24" dur="0.8s" repeatCount="indefinite"/>
+          </path>
+          <!-- Path C: Compressor → Condenser (red/hot) -->
+          <path d="M620,350 L700,350 L700,310" stroke="#F87171" stroke-width="4" fill="none" stroke-linecap="round" stroke-linejoin="round" stroke-dasharray="10 14" opacity=".7" id="pipe-c" class="pipe-animated">
+            <animate attributeName="stroke-dashoffset" from="0" to="-24" dur="0.8s" repeatCount="indefinite"/>
+          </path>
+          <!-- Path D: Condenser → Solenoid (purple liquid) -->
+          <path d="M700,200 L700,155 L440,155 L440,195 L330,195" stroke="#A78BFA" stroke-width="4" fill="none" stroke-linecap="round" stroke-linejoin="round" stroke-dasharray="10 14" opacity=".7" id="pipe-d" class="pipe-animated">
+            <animate attributeName="stroke-dashoffset" from="0" to="-24" dur="0.8s" repeatCount="indefinite"/>
+          </path>
+
+          <!-- ==================== EVAPORATOR COIL ==================== -->
+          <g id="evap-group">
+            <rect x="80" y="240" width="80" height="70" rx="8" fill="rgba(56,189,248,.06)" stroke="rgba(56,189,248,.25)" stroke-width="1.5" id="evap-coil-bg"/>
+            <!-- Coil zigzag -->
+            <path d="M95,252 L145,252 L145,262 L95,262 L95,272 L145,272 L145,282 L95,282 L95,292 L145,292 L145,300" stroke="#38BDF8" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round" opacity=".7"/>
+            <text x="120" y="322" text-anchor="middle" fill="#38BDF8" font-family="Urbanist,sans-serif" font-size="10" font-weight="600">EVAPORATOR</text>
+          </g>
+
+          <!-- Cold air arrow -->
+          <g id="cold-air-group" opacity=".7">
+            <path d="M68,270 L30,270" stroke="#38BDF8" stroke-width="2.5" fill="none" marker-end="url(#arrow-cold)" stroke-dasharray="4 3">
+              <animate attributeName="stroke-dashoffset" from="0" to="-7" dur="0.6s" repeatCount="indefinite"/>
+            </path>
+            <rect x="6" y="260" width="38" height="20" rx="4" fill="rgba(56,189,248,.12)" stroke="rgba(56,189,248,.2)" stroke-width="1"/>
+            <text x="25" y="274" text-anchor="middle" fill="#38BDF8" font-family="Urbanist,sans-serif" font-size="9" font-weight="700">COLD</text>
+          </g>
+
+          <!-- Fan (indoor) -->
+          <g id="indoor-fan" transform="translate(220, 268)">
+            <circle cx="0" cy="0" r="20" fill="rgba(255,255,255,.03)" stroke="rgba(255,255,255,.08)" stroke-width="1"/>
+            <g id="fan-blades-indoor">
+              <path d="M0,-14 Q8,-4 0,0 Q-8,-4 0,-14Z" fill="rgba(255,255,255,.25)"/>
+              <path d="M12,7 Q4,12 0,0 Q8,2 12,7Z" fill="rgba(255,255,255,.25)"/>
+              <path d="M-12,7 Q-4,12 0,0 Q-8,2 -12,7Z" fill="rgba(255,255,255,.25)"/>
+            </g>
+            <animateTransform xlink:href="#fan-blades-indoor" attributeName="transform" type="rotate" from="0" to="360" dur="1.2s" repeatCount="indefinite" id="fan-indoor-spin"/>
+            <text x="0" y="34" text-anchor="middle" fill="rgba(255,255,255,.3)" font-family="Urbanist,sans-serif" font-size="8" font-weight="600">FAN</text>
+          </g>
+
+          <!-- Space Air label -->
+          <g opacity=".5">
+            <path d="M310,268 L270,268" stroke="#FBBF24" stroke-width="1.5" fill="none" marker-end="url(#arrow-gas)"/>
+            <text x="330" y="272" fill="#FBBF24" font-family="Urbanist,sans-serif" font-size="8" font-weight="600" letter-spacing=".5">SPACE AIR</text>
+          </g>
+
+          <!-- ==================== EXPANSION VALVE ==================== -->
+          <g id="expansion-group" transform="translate(230, 195)">
+            <circle cx="0" cy="0" r="16" fill="var(--card)" stroke="rgba(255,255,255,.12)" stroke-width="1.5"/>
+            <text x="0" y="1" text-anchor="middle" fill="rgba(255,255,255,.5)" font-family="Urbanist,sans-serif" font-size="12">⊗</text>
+            <text x="0" y="-24" text-anchor="middle" fill="rgba(255,255,255,.4)" font-family="Urbanist,sans-serif" font-size="8" font-weight="600" letter-spacing=".5">EXPANSION</text>
+            <text x="0" y="-14" text-anchor="middle" fill="rgba(255,255,255,.4)" font-family="Urbanist,sans-serif" font-size="8" font-weight="600" letter-spacing=".5">VALVE</text>
+          </g>
+
+          <!-- ==================== SOLENOID VALVE ==================== -->
+          <g id="solenoid-group" transform="translate(330, 195)">
+            <rect x="-22" y="-18" width="44" height="36" rx="8" fill="var(--card)" stroke="rgba(0,230,118,.3)" stroke-width="2" id="sol-rect"/>
+            <text x="0" y="2" text-anchor="middle" font-family="Urbanist,sans-serif" font-size="16" id="sol-icon-svg" fill="#00E676">⟡</text>
+            <text x="0" y="-26" text-anchor="middle" fill="#00E676" font-family="Urbanist,sans-serif" font-size="8" font-weight="700" letter-spacing=".5" id="sol-label-svg">SOLENOID</text>
+            <text x="0" y="32" text-anchor="middle" font-family="Urbanist,sans-serif" font-size="10" font-weight="700" id="sol-status-svg" fill="#00E676">OPEN</text>
+          </g>
+
+          <!-- ==================== CONDENSER COIL ==================== -->
+          <g id="cond-group">
+            <rect x="660" y="200" width="80" height="70" rx="8" fill="rgba(248,113,113,.05)" stroke="rgba(248,113,113,.2)" stroke-width="1.5" id="cond-coil-bg"/>
+            <!-- Coil zigzag -->
+            <path d="M675,212 L725,212 L725,222 L675,222 L675,232 L725,232 L725,242 L675,242 L675,252 L725,252 L725,260" stroke="#F87171" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round" opacity=".5"/>
+            <text x="700" y="190" text-anchor="middle" fill="#F87171" font-family="Urbanist,sans-serif" font-size="10" font-weight="600">CONDENSER</text>
+          </g>
+
+          <!-- Hot air arrow -->
+          <g id="hot-air-group" opacity=".7">
+            <path d="M752,240 L790,240" stroke="#F87171" stroke-width="2.5" fill="none" marker-end="url(#arrow-hot)" stroke-dasharray="4 3">
+              <animate attributeName="stroke-dashoffset" from="0" to="-7" dur="0.6s" repeatCount="indefinite"/>
+            </path>
+            <rect x="798" y="230" width="34" height="20" rx="4" fill="rgba(248,113,113,.1)" stroke="rgba(248,113,113,.2)" stroke-width="1"/>
+            <text x="815" y="244" text-anchor="middle" fill="#F87171" font-family="Urbanist,sans-serif" font-size="9" font-weight="700">HOT</text>
+          </g>
+
+          <!-- Fan (outdoor) -->
+          <g id="outdoor-fan" transform="translate(590, 240)">
+            <circle cx="0" cy="0" r="20" fill="rgba(255,255,255,.03)" stroke="rgba(255,255,255,.08)" stroke-width="1"/>
+            <g id="fan-blades-outdoor">
+              <path d="M0,-14 Q8,-4 0,0 Q-8,-4 0,-14Z" fill="rgba(255,255,255,.25)"/>
+              <path d="M12,7 Q4,12 0,0 Q8,2 12,7Z" fill="rgba(255,255,255,.25)"/>
+              <path d="M-12,7 Q-4,12 0,0 Q-8,2 -12,7Z" fill="rgba(255,255,255,.25)"/>
+            </g>
+            <animateTransform xlink:href="#fan-blades-outdoor" attributeName="transform" type="rotate" from="0" to="360" dur="1s" repeatCount="indefinite" id="fan-outdoor-spin"/>
+            <text x="0" y="34" text-anchor="middle" fill="rgba(255,255,255,.3)" font-family="Urbanist,sans-serif" font-size="8" font-weight="600">FAN</text>
+          </g>
+
+          <!-- Ambient Air label -->
+          <g opacity=".5">
+            <path d="M530,240 L560,240" stroke="#FBBF24" stroke-width="1.5" fill="none" marker-end="url(#arrow-gas)"/>
+            <text x="517" y="244" text-anchor="end" fill="#FBBF24" font-family="Urbanist,sans-serif" font-size="8" font-weight="600" letter-spacing=".5">AMBIENT</text>
+          </g>
+
+          <!-- ==================== COMPRESSOR ==================== -->
+          <g id="comp-group" transform="translate(590, 350)">
+            <circle cx="0" cy="0" r="28" fill="var(--card)" stroke="rgba(0,230,118,.3)" stroke-width="2" id="comp-circle"/>
+            <circle cx="0" cy="0" r="18" fill="none" stroke="rgba(0,230,118,.15)" stroke-width="1" id="comp-inner"/>
+            <!-- Piston icon -->
+            <line x1="-8" y1="-6" x2="8" y2="6" stroke="#00E676" stroke-width="2.5" stroke-linecap="round" opacity=".8" id="comp-piston"/>
+            <circle cx="0" cy="0" r="4" fill="#00E676" opacity=".6" id="comp-center-dot"/>
+            <text x="0" y="46" text-anchor="middle" fill="#00E676" font-family="Urbanist,sans-serif" font-size="11" font-weight="700" letter-spacing=".5" id="comp-label-svg">COMPRESSOR</text>
+            <text x="0" y="58" text-anchor="middle" font-family="Urbanist,sans-serif" font-size="9" font-weight="600" id="comp-status-svg" fill="rgba(0,230,118,.6)">RUNNING</text>
+          </g>
+
+          <!-- ==================== SENSOR BADGES ==================== -->
+          <!-- Sensor 1: Coolant IN (on pipe entering evaporator) -->
+          <g class="sensor-badge" id="sensor-1">
+            <rect x="126" y="185" width="20" height="20" rx="4" fill="rgba(251,191,36,.1)" stroke="rgba(251,191,36,.3)" stroke-width="1"/>
+            <text x="136" y="199" text-anchor="middle" fill="#FBBF24" font-family="Urbanist,sans-serif" font-size="10" font-weight="700">1</text>
+          </g>
+          <!-- Sensor 2: Coolant OUT (on pipe leaving evaporator) -->
+          <g class="sensor-badge" id="sensor-2">
+            <rect x="126" y="330" width="20" height="20" rx="4" fill="rgba(251,191,36,.1)" stroke="rgba(251,191,36,.3)" stroke-width="1"/>
+            <text x="136" y="344" text-anchor="middle" fill="#FBBF24" font-family="Urbanist,sans-serif" font-size="10" font-weight="700">2</text>
+          </g>
+          <!-- Sensor 3: Space Air Temp -->
+          <g class="sensor-badge" id="sensor-3">
+            <rect x="280" y="285" width="20" height="20" rx="4" fill="rgba(251,191,36,.1)" stroke="rgba(251,191,36,.3)" stroke-width="1"/>
+            <text x="290" y="299" text-anchor="middle" fill="#FBBF24" font-family="Urbanist,sans-serif" font-size="10" font-weight="700">3</text>
+          </g>
+          <!-- Sensor 7: Liquid line -->
+          <g class="sensor-badge" id="sensor-7">
+            <rect x="430" y="137" width="20" height="20" rx="4" fill="rgba(251,191,36,.1)" stroke="rgba(251,191,36,.3)" stroke-width="1"/>
+            <text x="440" y="151" text-anchor="middle" fill="#FBBF24" font-family="Urbanist,sans-serif" font-size="10" font-weight="700">7</text>
+          </g>
+          <!-- Sensor 8: Compressor -->
+          <g class="sensor-badge" id="sensor-8">
+            <rect x="625" y="340" width="20" height="20" rx="4" fill="rgba(251,191,36,.1)" stroke="rgba(251,191,36,.3)" stroke-width="1"/>
+            <text x="635" y="354" text-anchor="middle" fill="#FBBF24" font-family="Urbanist,sans-serif" font-size="10" font-weight="700">8</text>
+          </g>
+
+          <!-- ==================== enPACT CONTROLLER ==================== -->
+          <g id="enpact-ctrl">
+            <rect x="260" y="430" width="160" height="44" rx="8" fill="var(--card)" stroke="rgba(0,230,118,.35)" stroke-width="2" id="enpact-box"/>
+            <text x="340" y="457" text-anchor="middle" fill="#00E676" font-family="Urbanist,sans-serif" font-size="14" font-weight="800" letter-spacing="2">ENPACT</text>
+            <!-- Control line to solenoid -->
+            <path d="M340,430 L340,220 L308,195" stroke="rgba(0,230,118,.25)" stroke-width="1.5" fill="none" stroke-dasharray="4 4" id="ctrl-line-sol"/>
+            <!-- Control line to compressor monitor -->
+            <path d="M420,452 L560,452 L590,390" stroke="rgba(0,230,118,.15)" stroke-width="1" fill="none" stroke-dasharray="3 3" id="ctrl-line-comp"/>
+            <text x="490" y="446" fill="rgba(0,230,118,.35)" font-family="Urbanist,sans-serif" font-size="7" font-weight="600" letter-spacing=".5">CONTROL</text>
+          </g>
+
+          <!-- ==================== SUPERHEAT GAUGE ==================== -->
+          <g id="sh-gauge-svg" transform="translate(440, 260)">
+            <rect x="-40" y="-45" width="80" height="90" rx="10" fill="var(--card)" stroke="rgba(255,255,255,.08)" stroke-width="1.5" id="sh-bg"/>
+            <text x="0" y="-30" text-anchor="middle" fill="rgba(255,255,255,.35)" font-family="Urbanist,sans-serif" font-size="8" font-weight="700" letter-spacing="1">SUPERHEAT</text>
+            <!-- Gauge bar -->
+            <rect x="-4" y="-20" width="8" height="50" rx="4" fill="rgba(255,255,255,.05)" stroke="rgba(255,255,255,.06)" stroke-width="1"/>
+            <rect x="-3" y="15" width="6" height="14" rx="3" fill="#00E676" id="sh-bar-fill"/>
+            <!-- Value -->
+            <text x="0" y="42" text-anchor="middle" font-family="Urbanist,sans-serif" font-size="16" font-weight="700" fill="#00E676" id="sh-value-svg">5°K</text>
+          </g>
+
+          <!-- ==================== PIPE LEGEND ==================== -->
+          <g transform="translate(50, 490)" opacity=".5">
+            <line x1="0" y1="0" x2="20" y2="0" stroke="#38BDF8" stroke-width="3" stroke-linecap="round"/>
+            <text x="26" y="4" fill="#8B95A5" font-family="Instrument Sans,sans-serif" font-size="8">Cold Refrigerant</text>
+            <line x1="130" y1="0" x2="150" y2="0" stroke="#FBBF24" stroke-width="3" stroke-linecap="round"/>
+            <text x="156" y="4" fill="#8B95A5" font-family="Instrument Sans,sans-serif" font-size="8">Suction Gas</text>
+            <line x1="240" y1="0" x2="260" y2="0" stroke="#F87171" stroke-width="3" stroke-linecap="round"/>
+            <text x="266" y="4" fill="#8B95A5" font-family="Instrument Sans,sans-serif" font-size="8">Hot Gas</text>
+            <line x1="330" y1="0" x2="350" y2="0" stroke="#A78BFA" stroke-width="3" stroke-linecap="round"/>
+            <text x="356" y="4" fill="#8B95A5" font-family="Instrument Sans,sans-serif" font-size="8">Liquid Line</text>
+          </g>
         </svg>
-
-        <!-- Evaporator node -->
-        <div class="ors-node" style="top:12%;left:3%;width:32%" id="node-evap">
-          <div class="node-box highlight-blue">
-            <div class="node-icon cool"><div class="n-dot" style="background:#3B82F6;box-shadow:0 0 6px rgba(59,130,246,.5)"></div></div>
-            <div class="node-label">Evaporator</div>
-            <div class="node-sub">Indoor unit — absorbs heat<br>Sensors ①② monitor coolant</div>
-          </div>
-        </div>
-
-        <!-- Compressor node -->
-        <div class="ors-node" style="bottom:10%;right:8%;width:32%" id="node-comp">
-          <div class="node-box" id="comp-box">
-            <div class="node-icon on" id="comp-icon"><div class="n-dot" id="comp-dot"></div></div>
-            <div class="node-label">Compressor</div>
-            <div class="node-sub" id="comp-status">Running — consuming power<br>80–90% of system energy</div>
-          </div>
-        </div>
-
-        <!-- Solenoid valve -->
-        <div class="solenoid-node" id="node-sol">
-          <div class="sol-circle open" id="sol-circle">
-            <span class="sol-x" id="sol-icon">⟡</span>
-          </div>
-          <div class="sol-label" id="sol-label">Open</div>
-        </div>
-
-        <!-- Superheat gauge -->
-        <div class="sh-gauge">
-          <div class="sh-title">Superheat</div>
-          <div class="sh-track">
-            <div class="sh-fill" id="sh-fill" style="height:30%"></div>
-          </div>
-          <div class="sh-val" id="sh-val">5°K</div>
-        </div>
       </div>
 
       <!-- Phase info panel -->
-      <div class="ors-info">
-        <div class="phase-insight">Compressors account for <strong style="color:var(--t1)">80–90%</strong> of a refrigeration system's energy consumption. By optimising their runtime through superheat monitoring, enPact delivers outsized savings of <strong style="color:var(--acc)">up to 40%</strong>.</div>
+      <div class="ors-info-full">
+        <div class="phase-insight">Compressors account for <strong style="color:var(--t1)">80–90%</strong> of a refrigeration system's energy consumption. By monitoring superheat at the evaporator via sensors ① and ②, enPact optimises every compressor cycle — delivering savings of <strong style="color:var(--acc)">up to 40%</strong>.</div>
         <div class="phase-cards">
           <div class="phase-card" id="phase-0">
             <div class="phase-num">Phase 1 — Monitor</div>
@@ -833,29 +1016,46 @@ const observer = new IntersectionObserver((entries) => {
 }, { threshold: 0.12 });
 reveals.forEach(el => observer.observe(el));
 
-// ORS Cycle Animation
+// ORS Cycle Animation — Enhanced Schematic
 (function() {
   const phases = [
-    { name: 'monitor',  duration: 4000 },
-    { name: 'interrupt', duration: 3500 },
-    { name: 'harvest',  duration: 4500 },
-    { name: 'restart',  duration: 3000 }
+    { name: 'monitor',   duration: 4500 },
+    { name: 'interrupt',  duration: 3500 },
+    { name: 'harvest',   duration: 5000 },
+    { name: 'restart',   duration: 3000 }
   ];
   const totalDuration = phases.reduce((s, p) => s + p.duration, 0);
 
-  // Elements
-  const pipeTop = document.getElementById('pipe-top');
-  const pipeBottom = document.getElementById('pipe-bottom');
-  const pipeReturn = document.getElementById('pipe-return');
-  const compBox = document.getElementById('comp-box');
-  const compIcon = document.getElementById('comp-icon');
-  const compDot = document.getElementById('comp-dot');
-  const compStatus = document.getElementById('comp-status');
-  const solCircle = document.getElementById('sol-circle');
-  const solIcon = document.getElementById('sol-icon');
-  const solLabel = document.getElementById('sol-label');
-  const shFill = document.getElementById('sh-fill');
-  const shVal = document.getElementById('sh-val');
+  // SVG elements
+  const pipeA = document.getElementById('pipe-a');  // Expansion → Evaporator (cyan)
+  const pipeB = document.getElementById('pipe-b');  // Evaporator → Compressor (yellow)
+  const pipeC = document.getElementById('pipe-c');  // Compressor → Condenser (red)
+  const pipeD = document.getElementById('pipe-d');  // Condenser → Solenoid (purple)
+
+  // Components
+  const solRect = document.getElementById('sol-rect');
+  const solIconSvg = document.getElementById('sol-icon-svg');
+  const solStatusSvg = document.getElementById('sol-status-svg');
+  const solLabelSvg = document.getElementById('sol-label-svg');
+
+  const compCircle = document.getElementById('comp-circle');
+  const compInner = document.getElementById('comp-inner');
+  const compPiston = document.getElementById('comp-piston');
+  const compCenterDot = document.getElementById('comp-center-dot');
+  const compLabelSvg = document.getElementById('comp-label-svg');
+  const compStatusSvg = document.getElementById('comp-status-svg');
+
+  const evapCoilBg = document.getElementById('evap-coil-bg');
+  const indoorBox = document.getElementById('indoor-box');
+  const outdoorBox = document.getElementById('outdoor-box');
+
+  const shBarFill = document.getElementById('sh-bar-fill');
+  const shValueSvg = document.getElementById('sh-value-svg');
+  const shBg = document.getElementById('sh-bg');
+
+  const enpactBox = document.getElementById('enpact-box');
+  const ctrlLineSol = document.getElementById('ctrl-line-sol');
+
   const progressFill = document.getElementById('progress-fill');
   const phaseCards = [
     document.getElementById('phase-0'),
@@ -863,58 +1063,125 @@ reveals.forEach(el => observer.observe(el));
     document.getElementById('phase-2'),
     document.getElementById('phase-3')
   ];
-  const nodeEvap = document.getElementById('node-evap');
+
+  // Sensor badges
+  const sensor1 = document.getElementById('sensor-1');
+  const sensor2 = document.getElementById('sensor-2');
 
   function setPhase(idx) {
-    // Reset all phase cards
     phaseCards.forEach((c, i) => c.classList.toggle('active', i === idx));
   }
 
-  function setPipes(flowing) {
-    const cls = flowing ? 'pipe-flow flowing' : 'pipe-flow paused';
-    pipeTop.setAttribute('class', cls);
-    pipeBottom.setAttribute('class', cls);
-    pipeReturn.setAttribute('class', cls);
+  function setPipesFlowing(flowing) {
+    const pipes = [pipeA, pipeB, pipeC, pipeD];
+    pipes.forEach(p => {
+      if (flowing) {
+        p.style.opacity = '';
+        // Resume animations
+        const anim = p.querySelector('animate');
+        if (anim) anim.setAttribute('dur', '0.8s');
+      } else {
+        p.style.opacity = '0.15';
+      }
+    });
   }
 
-  function setCompressor(on) {
-    if (on) {
-      compBox.className = 'node-box highlight-green';
-      compIcon.className = 'node-icon on';
-      compDot.style.background = 'var(--acc)';
-      compDot.style.boxShadow = '0 0 6px var(--acc)';
-      compStatus.innerHTML = 'Running — consuming power<br>80–90% of system energy';
+  function setPipeFlowing(pipe, flowing, baseOpacity) {
+    if (flowing) {
+      pipe.style.opacity = baseOpacity || '';
     } else {
-      compBox.className = 'node-box highlight-red';
-      compIcon.className = 'node-icon off';
-      compDot.style.background = '#EF4444';
-      compDot.style.boxShadow = '0 0 6px rgba(239,68,68,.5)';
-      compStatus.innerHTML = 'Halted — zero energy draw<br>Saving power';
+      pipe.style.opacity = '0.1';
     }
   }
 
   function setSolenoid(open) {
-    solCircle.className = open ? 'sol-circle open' : 'sol-circle closed';
-    solIcon.textContent = open ? '⟡' : '✕';
-    solLabel.textContent = open ? 'Open' : 'Closed';
-  }
-
-  function setSuperheat(pct, kelvin, warn) {
-    shFill.style.height = pct + '%';
-    shFill.className = warn ? 'sh-fill warn' : 'sh-fill';
-    shVal.textContent = kelvin + '°K';
-    shVal.className = warn ? 'sh-val warn' : 'sh-val';
-  }
-
-  function setEvapGlow(harvesting) {
-    const box = nodeEvap.querySelector('.node-box');
-    if (harvesting) {
-      box.className = 'node-box highlight-blue';
-      box.style.boxShadow = '0 0 40px rgba(59,130,246,.15)';
+    if (open) {
+      solRect.setAttribute('stroke', 'rgba(0,230,118,.4)');
+      solRect.setAttribute('fill', 'rgba(0,230,118,.06)');
+      solIconSvg.textContent = '⟡';
+      solIconSvg.setAttribute('fill', '#00E676');
+      solStatusSvg.textContent = 'OPEN';
+      solStatusSvg.setAttribute('fill', '#00E676');
+      solLabelSvg.setAttribute('fill', '#00E676');
     } else {
-      box.className = 'node-box highlight-blue';
-      box.style.boxShadow = '';
+      solRect.setAttribute('stroke', 'rgba(239,68,68,.5)');
+      solRect.setAttribute('fill', 'rgba(239,68,68,.06)');
+      solIconSvg.textContent = '✕';
+      solIconSvg.setAttribute('fill', '#EF4444');
+      solStatusSvg.textContent = 'CLOSED';
+      solStatusSvg.setAttribute('fill', '#EF4444');
+      solLabelSvg.setAttribute('fill', '#EF4444');
     }
+  }
+
+  function setCompressor(on) {
+    if (on) {
+      compCircle.setAttribute('stroke', 'rgba(0,230,118,.4)');
+      compInner.setAttribute('stroke', 'rgba(0,230,118,.2)');
+      compPiston.setAttribute('stroke', '#00E676');
+      compCenterDot.setAttribute('fill', '#00E676');
+      compLabelSvg.setAttribute('fill', '#00E676');
+      compStatusSvg.textContent = 'RUNNING';
+      compStatusSvg.setAttribute('fill', 'rgba(0,230,118,.6)');
+    } else {
+      compCircle.setAttribute('stroke', 'rgba(239,68,68,.4)');
+      compInner.setAttribute('stroke', 'rgba(239,68,68,.15)');
+      compPiston.setAttribute('stroke', '#EF4444');
+      compCenterDot.setAttribute('fill', '#EF4444');
+      compLabelSvg.setAttribute('fill', '#EF4444');
+      compStatusSvg.textContent = 'HALTED';
+      compStatusSvg.setAttribute('fill', 'rgba(239,68,68,.6)');
+    }
+  }
+
+  function setSuperheat(fraction, kelvin, warn) {
+    // fraction 0-1, maps to bar height (max 48px from y=-18 to y=30)
+    const maxH = 48;
+    const h = Math.max(4, fraction * maxH);
+    const y = 30 - h;
+    shBarFill.setAttribute('height', h);
+    shBarFill.setAttribute('y', y);
+
+    shValueSvg.textContent = kelvin + '°K';
+
+    if (warn) {
+      shBarFill.setAttribute('fill', '#F59E0B');
+      shValueSvg.setAttribute('fill', '#F59E0B');
+      shBg.setAttribute('stroke', 'rgba(245,158,11,.2)');
+    } else {
+      shBarFill.setAttribute('fill', '#00E676');
+      shValueSvg.setAttribute('fill', '#00E676');
+      shBg.setAttribute('stroke', 'rgba(255,255,255,.08)');
+    }
+  }
+
+  function setEvaporatorGlow(harvesting) {
+    if (harvesting) {
+      evapCoilBg.setAttribute('fill', 'rgba(56,189,248,.12)');
+      evapCoilBg.setAttribute('stroke', 'rgba(56,189,248,.5)');
+      indoorBox.setAttribute('stroke', 'rgba(56,189,248,.25)');
+    } else {
+      evapCoilBg.setAttribute('fill', 'rgba(56,189,248,.06)');
+      evapCoilBg.setAttribute('stroke', 'rgba(56,189,248,.25)');
+      indoorBox.setAttribute('stroke', 'rgba(56,189,248,.12)');
+    }
+  }
+
+  function setEnpactActive(active) {
+    if (active) {
+      enpactBox.setAttribute('stroke', 'rgba(0,230,118,.6)');
+      enpactBox.setAttribute('fill', 'rgba(0,230,118,.08)');
+      ctrlLineSol.setAttribute('stroke', 'rgba(0,230,118,.5)');
+    } else {
+      enpactBox.setAttribute('stroke', 'rgba(0,230,118,.35)');
+      enpactBox.setAttribute('fill', 'var(--card)');
+      ctrlLineSol.setAttribute('stroke', 'rgba(0,230,118,.25)');
+    }
+  }
+
+  function setSensorPulse(s1, s2) {
+    sensor1.classList.toggle('pulse', s1);
+    sensor2.classList.toggle('pulse', s2);
   }
 
   let startTime = null;
@@ -925,10 +1192,7 @@ reveals.forEach(el => observer.observe(el));
     if (!startTime) startTime = timestamp;
     const elapsed = (timestamp - startTime) % totalDuration;
 
-    // Determine current phase
-    let cumulative = 0;
-    let currentPhase = 0;
-    let phaseElapsed = 0;
+    let cumulative = 0, currentPhase = 0, phaseElapsed = 0;
     for (let i = 0; i < phases.length; i++) {
       if (elapsed < cumulative + phases[i].duration) {
         currentPhase = i;
@@ -939,54 +1203,82 @@ reveals.forEach(el => observer.observe(el));
     }
 
     const phaseProgress = phaseElapsed / phases[currentPhase].duration;
-
-    // Overall progress
     progressFill.style.width = ((elapsed / totalDuration) * 100) + '%';
-
     setPhase(currentPhase);
 
     switch(currentPhase) {
-      case 0: // Monitor — superheat rising, everything running
-        setPipes(true);
+      case 0: // Monitor — everything running, superheat rising
+        setPipeFlowing(pipeA, true, '.9');
+        setPipeFlowing(pipeB, true, '.7');
+        setPipeFlowing(pipeC, true, '.7');
+        setPipeFlowing(pipeD, true, '.7');
         setCompressor(true);
         setSolenoid(true);
-        setEvapGlow(false);
+        setEvaporatorGlow(false);
+        setEnpactActive(false);
+        setSensorPulse(true, true);
         // Superheat rises from 5 to 12
         const shRise = 5 + phaseProgress * 7;
-        const shPctRise = 25 + phaseProgress * 55;
-        setSuperheat(shPctRise, shRise.toFixed(1), shRise > 10);
+        setSuperheat(0.2 + phaseProgress * 0.6, shRise.toFixed(1), shRise > 10);
         break;
 
       case 1: // Interrupt — solenoid closes, compressor stops, flow stops
-        const interruptProg = Math.min(phaseProgress * 3, 1); // quick transition
-        setPipes(interruptProg < 0.3);
+        const iP = Math.min(phaseProgress * 3, 1);
+        if (iP < 0.3) {
+          setPipeFlowing(pipeA, true, '.9');
+          setPipeFlowing(pipeB, true, '.7');
+          setPipeFlowing(pipeC, true, '.7');
+          setPipeFlowing(pipeD, true, '.7');
+        } else {
+          setPipeFlowing(pipeA, false);
+          setPipeFlowing(pipeB, false);
+          setPipeFlowing(pipeC, false);
+          setPipeFlowing(pipeD, false);
+        }
         setCompressor(false);
         setSolenoid(false);
-        setEvapGlow(false);
-        setSuperheat(80, '12.0', true);
+        setEvaporatorGlow(false);
+        setEnpactActive(true);
+        setSensorPulse(true, true);
+        setSuperheat(0.8, '12.0', true);
         break;
 
-      case 2: // Harvest — no flow, compressor off, evaporator glows, superheat drops
-        setPipes(false);
+      case 2: // Harvest — no flow, evaporator glows, superheat drops
+        setPipeFlowing(pipeA, false);
+        setPipeFlowing(pipeB, false);
+        setPipeFlowing(pipeC, false);
+        setPipeFlowing(pipeD, false);
         setCompressor(false);
         setSolenoid(false);
-        setEvapGlow(true);
+        setEvaporatorGlow(true);
+        setEnpactActive(true);
+        setSensorPulse(true, true);
         // Superheat drops from 12 to 3
         const shDrop = 12 - phaseProgress * 9;
-        const shPctDrop = 80 - phaseProgress * 60;
-        setSuperheat(shPctDrop, shDrop.toFixed(1), shDrop > 6);
+        setSuperheat(0.8 - phaseProgress * 0.6, shDrop.toFixed(1), shDrop > 6);
         break;
 
       case 3: // Restart — solenoid opens, compressor starts, flow resumes
-        const restartProg = Math.min(phaseProgress * 2.5, 1);
-        setPipes(restartProg > 0.3);
+        const rP = Math.min(phaseProgress * 2.5, 1);
+        if (rP > 0.3) {
+          setPipeFlowing(pipeA, true, '.9');
+          setPipeFlowing(pipeB, true, '.7');
+          setPipeFlowing(pipeC, true, '.7');
+          setPipeFlowing(pipeD, true, '.7');
+        } else {
+          setPipeFlowing(pipeA, false);
+          setPipeFlowing(pipeB, false);
+          setPipeFlowing(pipeC, false);
+          setPipeFlowing(pipeD, false);
+        }
         setCompressor(true);
         setSolenoid(true);
-        setEvapGlow(false);
-        // Superheat rises from 3 to 5
+        setEvaporatorGlow(false);
+        setEnpactActive(true);
+        setSensorPulse(false, false);
+        // Superheat settles 3 → 5
         const shRestart = 3 + phaseProgress * 2;
-        const shPctRestart = 20 + phaseProgress * 5;
-        setSuperheat(shPctRestart, shRestart.toFixed(1), false);
+        setSuperheat(0.15 + phaseProgress * 0.1, shRestart.toFixed(1), false);
         break;
     }
 
@@ -1003,7 +1295,7 @@ reveals.forEach(el => observer.observe(el));
         requestAnimationFrame(animate);
       }
     });
-  }, { threshold: 0.2 });
+  }, { threshold: 0.15 });
   orsObserver.observe(orsSection);
 })();
 
