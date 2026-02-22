@@ -1,0 +1,557 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Emissis — Intelligent Energy Optimisation</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Instrument+Sans:wght@400;500;600;700&family=Syne:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+*,*::before,*::after{margin:0;padding:0;box-sizing:border-box}
+:root{
+  --bg:#07090D;--bg2:#0D1117;--card:#111820;--card-h:#161E28;
+  --acc:#00E676;--acc2:#00C864;--acc-g:rgba(0,230,118,.15);--acc-s:rgba(0,230,118,.06);
+  --t1:#E8ECF1;--t2:#8B95A5;--t3:#4A5568;
+  --brd:rgba(255,255,255,.06);--brd-a:rgba(0,230,118,.2);
+  --df:'Syne',sans-serif;--db:'Instrument Sans',sans-serif;
+}
+html{scroll-behavior:smooth}
+body{font-family:var(--db);background:var(--bg);color:var(--t1);overflow-x:hidden;-webkit-font-smoothing:antialiased}
+.container{max-width:1280px;margin:0 auto;padding:0 40px}
+
+/* Grid bg */
+.grid-bg{position:fixed;inset:0;background-image:linear-gradient(rgba(255,255,255,.018) 1px,transparent 1px),linear-gradient(90deg,rgba(255,255,255,.018) 1px,transparent 1px);background-size:80px 80px;pointer-events:none;z-index:0}
+
+/* NAV */
+nav{position:fixed;top:0;left:0;right:0;z-index:1000;padding:18px 0;backdrop-filter:blur(24px);-webkit-backdrop-filter:blur(24px);background:rgba(7,9,13,.75);border-bottom:1px solid var(--brd)}
+nav .container{display:flex;align-items:center;justify-content:space-between}
+.nav-logo{display:flex;align-items:center;gap:12px;text-decoration:none;color:var(--t1)}
+.logo-mark{width:36px;height:36px;border-radius:10px;background:linear-gradient(135deg,var(--acc),#00B86B);display:flex;align-items:center;justify-content:center;font-family:var(--df);font-weight:800;font-size:18px;color:var(--bg)}
+.logo-text{font-family:var(--df);font-weight:700;font-size:22px;letter-spacing:-.5px}
+.nav-links{display:flex;align-items:center;gap:32px;list-style:none}
+.nav-links a{color:var(--t2);text-decoration:none;font-size:14px;font-weight:500;transition:color .3s;position:relative}
+.nav-links a::after{content:'';position:absolute;bottom:-4px;left:0;width:0;height:1.5px;background:var(--acc);transition:width .3s}
+.nav-links a:hover{color:var(--t1)}
+.nav-links a:hover::after{width:100%}
+.nav-cta{padding:10px 24px!important;background:var(--acc)!important;color:var(--bg)!important;border-radius:8px;font-weight:600!important;font-size:13px!important;letter-spacing:.5px;text-transform:uppercase;transition:all .3s!important}
+.nav-cta::after{display:none!important}
+.nav-cta:hover{background:#00FF84!important;transform:translateY(-1px);box-shadow:0 4px 24px rgba(0,230,118,.3)}
+
+/* HERO */
+.hero{position:relative;min-height:100vh;display:flex;align-items:center;padding:140px 0 100px;overflow:hidden}
+.hero-glow{position:absolute;width:800px;height:800px;border-radius:50%;background:radial-gradient(circle,rgba(0,230,118,.07) 0%,transparent 70%);top:-200px;right:-200px;animation:gp 8s ease-in-out infinite;pointer-events:none}
+.hero-glow-2{position:absolute;width:600px;height:600px;border-radius:50%;background:radial-gradient(circle,rgba(0,100,240,.04) 0%,transparent 70%);bottom:-100px;left:-100px;animation:gp 10s ease-in-out infinite reverse;pointer-events:none}
+@keyframes gp{0%,100%{opacity:.6;transform:scale(1)}50%{opacity:1;transform:scale(1.1)}}
+.hero .container{position:relative;z-index:1;display:grid;grid-template-columns:1.1fr .9fr;gap:60px;align-items:center}
+.hero-badge{display:inline-flex;align-items:center;gap:8px;padding:6px 16px;border-radius:100px;border:1px solid var(--brd-a);background:var(--acc-s);font-size:11px;font-weight:600;letter-spacing:1.2px;text-transform:uppercase;color:var(--acc);margin-bottom:28px;animation:fi .8s ease both}
+.hero-badge .dot{width:6px;height:6px;border-radius:50%;background:var(--acc);animation:blink 2s ease-in-out infinite}
+@keyframes blink{0%,100%{opacity:1}50%{opacity:.3}}
+@keyframes fi{from{opacity:0;transform:translateY(12px)}to{opacity:1;transform:translateY(0)}}
+.hero h1{font-family:var(--df);font-size:clamp(42px,5vw,72px);font-weight:800;line-height:1.05;letter-spacing:-2px;margin-bottom:24px;animation:fi .8s ease .1s both}
+.hero h1 .accent{color:var(--acc);position:relative}
+.hero p{font-size:18px;line-height:1.7;color:var(--t2);max-width:540px;margin-bottom:40px;animation:fi .8s ease .2s both}
+.hero-actions{display:flex;gap:16px;animation:fi .8s ease .3s both}
+.btn-primary{display:inline-flex;align-items:center;gap:10px;padding:16px 32px;background:var(--acc);color:var(--bg);font-weight:700;font-size:14px;border:none;border-radius:10px;cursor:pointer;text-decoration:none;letter-spacing:.3px;transition:all .3s}
+.btn-primary:hover{background:#00FF84;transform:translateY(-2px);box-shadow:0 8px 32px rgba(0,230,118,.25)}
+.btn-secondary{display:inline-flex;align-items:center;gap:10px;padding:16px 32px;background:transparent;color:var(--t1);font-weight:600;font-size:14px;border:1px solid var(--brd);border-radius:10px;cursor:pointer;text-decoration:none;transition:all .3s}
+.btn-secondary:hover{border-color:var(--t2);background:rgba(255,255,255,.03)}
+
+/* Hero visual */
+.hero-visual{position:relative;animation:fi 1s ease .4s both}
+.energy-ring{width:100%;aspect-ratio:1;position:relative;display:flex;align-items:center;justify-content:center}
+.ring{position:absolute;border-radius:50%;border:1px solid var(--brd-a);animation:spin 20s linear infinite}
+.ring:nth-child(1){width:100%;height:100%}
+.ring:nth-child(2){width:75%;height:75%;animation-duration:15s;animation-direction:reverse;border-color:rgba(0,230,118,.12)}
+.ring:nth-child(3){width:50%;height:50%;animation-duration:25s;border-color:rgba(0,230,118,.08)}
+@keyframes spin{to{transform:rotate(360deg)}}
+.ring-node{position:absolute;width:10px;height:10px;border-radius:50%;background:var(--acc);box-shadow:0 0 20px var(--acc-g)}
+.ring:nth-child(1) .ring-node{top:0;left:50%;transform:translate(-50%,-50%)}
+.ring:nth-child(2) .ring-node{bottom:0;right:10%;transform:translate(50%,50%)}
+.ring:nth-child(3) .ring-node{top:50%;left:0;transform:translate(-50%,-50%)}
+.ring-center{position:relative;z-index:2;text-align:center}
+.ring-center .big-num{font-family:var(--df);font-size:72px;font-weight:800;color:var(--acc);line-height:1}
+.ring-center .big-label{font-size:13px;color:var(--t2);letter-spacing:1px;text-transform:uppercase;margin-top:4px}
+
+/* STATS BAR */
+.stats-bar{position:relative;z-index:1;border-top:1px solid var(--brd);border-bottom:1px solid var(--brd);background:var(--bg2);padding:48px 0}
+.stats-bar .container{display:grid;grid-template-columns:repeat(4,1fr);gap:40px}
+.stat{text-align:center}
+.stat-num{font-family:var(--df);font-size:42px;font-weight:800;color:var(--acc);letter-spacing:-1px}
+.stat-label{font-size:13px;color:var(--t2);margin-top:6px;letter-spacing:.5px}
+
+/* SECTION SHARED */
+section{position:relative;z-index:1;padding:120px 0}
+.section-tag{display:inline-flex;align-items:center;gap:8px;font-size:11px;font-weight:600;letter-spacing:1.5px;text-transform:uppercase;color:var(--acc);margin-bottom:16px}
+.section-tag .line{width:24px;height:1px;background:var(--acc)}
+.section-title{font-family:var(--df);font-size:clamp(32px,3.5vw,52px);font-weight:800;letter-spacing:-1.5px;line-height:1.1;margin-bottom:20px}
+.section-sub{font-size:17px;color:var(--t2);line-height:1.7;max-width:600px}
+
+/* SOLUTIONS / enPact */
+.solutions{background:var(--bg)}
+.solutions-header{text-align:center;margin-bottom:72px}
+.solutions-header .section-sub{margin:0 auto}
+.solutions-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:24px}
+.sol-card{background:var(--card);border:1px solid var(--brd);border-radius:16px;padding:40px;transition:all .4s;position:relative;overflow:hidden}
+.sol-card::before{content:'';position:absolute;top:0;left:0;right:0;height:2px;background:linear-gradient(90deg,transparent,var(--acc),transparent);opacity:0;transition:opacity .4s}
+.sol-card:hover{border-color:var(--brd-a);background:var(--card-h);transform:translateY(-4px)}
+.sol-card:hover::before{opacity:1}
+.sol-icon{width:48px;height:48px;border-radius:12px;background:var(--acc-s);border:1px solid var(--brd-a);display:flex;align-items:center;justify-content:center;margin-bottom:24px;font-size:22px}
+.sol-card h3{font-family:var(--df);font-size:22px;font-weight:700;letter-spacing:-.5px;margin-bottom:12px}
+.sol-card p{font-size:15px;color:var(--t2);line-height:1.7}
+.sol-tag{display:inline-block;margin-top:16px;font-size:12px;font-weight:600;color:var(--acc);letter-spacing:.5px}
+
+/* HOW IT WORKS */
+.how{background:var(--bg2)}
+.how-grid{display:grid;grid-template-columns:1fr 1fr;gap:80px;align-items:center;margin-top:64px}
+.how-steps{display:flex;flex-direction:column;gap:32px}
+.step{display:flex;gap:20px;padding:24px;border-radius:12px;border:1px solid transparent;transition:all .3s}
+.step:hover{border-color:var(--brd);background:rgba(255,255,255,.02)}
+.step-num{font-family:var(--df);font-size:28px;font-weight:800;color:var(--acc);line-height:1;min-width:40px}
+.step h4{font-family:var(--df);font-size:17px;font-weight:700;margin-bottom:6px;letter-spacing:-.3px}
+.step p{font-size:14px;color:var(--t2);line-height:1.6}
+.how-visual{display:flex;align-items:center;justify-content:center}
+.data-panel{width:100%;background:var(--card);border:1px solid var(--brd);border-radius:16px;padding:32px;position:relative;overflow:hidden}
+.data-panel::after{content:'';position:absolute;top:0;right:0;width:200px;height:200px;background:radial-gradient(circle,var(--acc-s),transparent);pointer-events:none}
+.data-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:28px}
+.data-header h4{font-family:var(--df);font-weight:700;font-size:16px}
+.live-dot{display:flex;align-items:center;gap:6px;font-size:11px;color:var(--acc);font-weight:600;letter-spacing:.5px;text-transform:uppercase}
+.live-dot::before{content:'';width:6px;height:6px;border-radius:50%;background:var(--acc);animation:blink 1.5s infinite}
+.data-bars{display:flex;flex-direction:column;gap:16px}
+.bar-row{display:flex;align-items:center;gap:14px}
+.bar-label{font-size:12px;color:var(--t2);min-width:80px;text-align:right}
+.bar-track{flex:1;height:28px;background:rgba(255,255,255,.04);border-radius:6px;overflow:hidden;position:relative}
+.bar-fill{height:100%;border-radius:6px;display:flex;align-items:center;justify-content:flex-end;padding-right:10px;font-size:11px;font-weight:700;color:var(--bg);animation:grow 1.5s ease both}
+.bar-fill.green{background:linear-gradient(90deg,var(--acc2),var(--acc))}
+.bar-fill.dim{background:linear-gradient(90deg,#1a3a2a,#2a5a3a);color:var(--acc)}
+@keyframes grow{from{width:0}to{width:var(--w)}}
+.data-footer{margin-top:24px;padding-top:20px;border-top:1px solid var(--brd);display:flex;justify-content:space-between}
+.data-stat{text-align:center}
+.data-stat span{font-family:var(--df);font-size:24px;font-weight:800;color:var(--acc)}
+.data-stat small{display:block;font-size:11px;color:var(--t3);margin-top:2px;letter-spacing:.5px;text-transform:uppercase}
+
+/* SECTORS */
+.sectors{background:var(--bg)}
+.sectors-header{margin-bottom:64px}
+.sectors-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:24px}
+.sector-card{background:var(--card);border:1px solid var(--brd);border-radius:16px;padding:48px 36px;text-align:center;transition:all .4s;position:relative;overflow:hidden}
+.sector-card::after{content:'';position:absolute;bottom:0;left:0;right:0;height:3px;background:var(--acc);transform:scaleX(0);transition:transform .4s}
+.sector-card:hover{transform:translateY(-6px);border-color:var(--brd-a)}
+.sector-card:hover::after{transform:scaleX(1)}
+.sector-icon{font-size:48px;margin-bottom:20px;display:block}
+.sector-card h3{font-family:var(--df);font-size:22px;font-weight:700;margin-bottom:12px;letter-spacing:-.3px}
+.sector-card p{font-size:14px;color:var(--t2);line-height:1.7}
+
+/* CLIENTS */
+.clients{background:var(--bg2);padding:80px 0}
+.clients-header{text-align:center;margin-bottom:48px}
+.client-logos{display:flex;flex-wrap:wrap;justify-content:center;gap:40px;align-items:center;opacity:.5;transition:opacity .4s}
+.client-logos:hover{opacity:.75}
+.client-logos span{font-family:var(--df);font-weight:700;font-size:18px;color:var(--t2);letter-spacing:-.3px;white-space:nowrap}
+
+/* TESTIMONIALS */
+.testimonials{background:var(--bg)}
+.test-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:24px;margin-top:64px}
+.test-card{background:var(--card);border:1px solid var(--brd);border-radius:16px;padding:36px;transition:all .3s}
+.test-card:hover{border-color:var(--brd-a)}
+.test-quote{font-size:15px;color:var(--t2);line-height:1.75;margin-bottom:24px;font-style:italic}
+.test-author{display:flex;align-items:center;gap:12px}
+.test-avatar{width:40px;height:40px;border-radius:10px;background:var(--acc-s);border:1px solid var(--brd-a);display:flex;align-items:center;justify-content:center;font-family:var(--df);font-weight:800;font-size:14px;color:var(--acc)}
+.test-name{font-weight:700;font-size:14px}
+.test-role{font-size:12px;color:var(--t3);margin-top:1px}
+
+/* CTA */
+.cta-section{background:var(--bg2);padding:120px 0;text-align:center;position:relative;overflow:hidden}
+.cta-section::before{content:'';position:absolute;top:50%;left:50%;width:800px;height:400px;background:radial-gradient(ellipse,var(--acc-s),transparent 70%);transform:translate(-50%,-50%);pointer-events:none}
+.cta-section .section-title{margin-bottom:16px}
+.cta-section .section-sub{margin:0 auto 40px;max-width:520px}
+
+/* FOOTER */
+footer{background:var(--bg);border-top:1px solid var(--brd);padding:64px 0 32px}
+footer .container{display:grid;grid-template-columns:1.5fr 1fr 1fr 1fr;gap:48px}
+.footer-brand p{font-size:14px;color:var(--t2);line-height:1.7;margin-top:16px;max-width:280px}
+.footer-col h4{font-family:var(--df);font-weight:700;font-size:14px;margin-bottom:20px;letter-spacing:.5px;text-transform:uppercase;color:var(--t2)}
+.footer-col a{display:block;color:var(--t2);text-decoration:none;font-size:14px;padding:5px 0;transition:color .3s}
+.footer-col a:hover{color:var(--acc)}
+.footer-bottom{margin-top:48px;padding-top:24px;border-top:1px solid var(--brd);display:flex;justify-content:space-between;align-items:center}
+.footer-bottom p{font-size:12px;color:var(--t3)}
+.footer-legal{display:flex;gap:24px}
+.footer-legal a{font-size:12px;color:var(--t3);text-decoration:none;transition:color .3s}
+.footer-legal a:hover{color:var(--t2)}
+
+/* Scroll animations */
+.reveal{opacity:0;transform:translateY(32px);transition:all .8s cubic-bezier(.16,1,.3,1)}
+.reveal.visible{opacity:1;transform:translateY(0)}
+.reveal-delay-1{transition-delay:.1s}
+.reveal-delay-2{transition-delay:.2s}
+.reveal-delay-3{transition-delay:.3s}
+.reveal-delay-4{transition-delay:.35s}
+
+/* Responsive */
+@media(max-width:1024px){
+  .hero .container{grid-template-columns:1fr;gap:48px}
+  .hero-visual{max-width:400px;margin:0 auto}
+  .solutions-grid{grid-template-columns:1fr}
+  .how-grid{grid-template-columns:1fr;gap:48px}
+  .sectors-grid{grid-template-columns:1fr}
+  .test-grid{grid-template-columns:1fr}
+  footer .container{grid-template-columns:1fr 1fr}
+}
+@media(max-width:768px){
+  .container{padding:0 24px}
+  .nav-links{display:none}
+  .stats-bar .container{grid-template-columns:1fr 1fr;gap:24px}
+  section{padding:80px 0}
+  footer .container{grid-template-columns:1fr}
+  .footer-bottom{flex-direction:column;gap:12px;text-align:center}
+}
+</style>
+</head>
+<body>
+<div class="grid-bg"></div>
+
+<!-- NAV -->
+<nav>
+  <div class="container">
+    <a href="#" class="nav-logo">
+      <div class="logo-mark">E</div>
+      <span class="logo-text">emissis</span>
+    </a>
+    <ul class="nav-links">
+      <li><a href="#solutions">Solutions</a></li>
+      <li><a href="#how">How It Works</a></li>
+      <li><a href="#sectors">Sectors</a></li>
+      <li><a href="#testimonials">Clients</a></li>
+      <li><a href="#contact" class="nav-cta">Get Started</a></li>
+    </ul>
+  </div>
+</nav>
+
+<!-- HERO -->
+<section class="hero">
+  <div class="hero-glow"></div>
+  <div class="hero-glow-2"></div>
+  <div class="container">
+    <div class="hero-content">
+      <div class="hero-badge"><span class="dot"></span> enPact Technology Suite</div>
+      <h1>Smarter Energy.<br><span class="accent">Guaranteed Savings.</span></h1>
+      <p>Emissis delivers enterprise-grade energy optimisation technology that reduces consumption by 20–40% — with zero disruption, zero maintenance, and real-time verified results.</p>
+      <div class="hero-actions">
+        <a href="#contact" class="btn-primary">Request Assessment <span>→</span></a>
+        <a href="#solutions" class="btn-secondary">Explore Solutions</a>
+      </div>
+    </div>
+    <div class="hero-visual">
+      <div class="energy-ring">
+        <div class="ring"><div class="ring-node"></div></div>
+        <div class="ring"><div class="ring-node"></div></div>
+        <div class="ring"><div class="ring-node"></div></div>
+        <div class="ring-center">
+          <div class="big-num" id="hero-counter">0%</div>
+          <div class="big-label">avg. energy reduction</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- STATS BAR -->
+<div class="stats-bar">
+  <div class="container">
+    <div class="stat reveal">
+      <div class="stat-num">£13M+</div>
+      <div class="stat-label">Electricity Spend Reduced</div>
+    </div>
+    <div class="stat reveal reveal-delay-1">
+      <div class="stat-num">43M+</div>
+      <div class="stat-label">kWh Reduction</div>
+    </div>
+    <div class="stat reveal reveal-delay-2">
+      <div class="stat-num">9,994</div>
+      <div class="stat-label">Tonnes CO₂ Saved</div>
+    </div>
+    <div class="stat reveal reveal-delay-3">
+      <div class="stat-num">458K+</div>
+      <div class="stat-label">Trees Equivalent Saved</div>
+    </div>
+  </div>
+</div>
+
+<!-- SOLUTIONS -->
+<section class="solutions" id="solutions">
+  <div class="container">
+    <div class="solutions-header">
+      <div class="section-tag"><span class="line"></span> enPact Suite</div>
+      <h2 class="section-title">One Platform.<br>Five Proven Technologies.</h2>
+      <p class="section-sub">Each solution works independently or as a tailored package — installed around operations with zero downtime and verified savings from day one.</p>
+    </div>
+    <div class="solutions-grid">
+      <div class="sol-card reveal">
+        <div class="sol-icon">❄️</div>
+        <h3>enPact Cooling &amp; Refrigeration</h3>
+        <p>Award-winning adaptive logic optimizer that intercepts thermostat signals and intelligently adjusts cooling cycles using real-time temperature data. Reduces compressor runtime without affecting performance.</p>
+        <span class="sol-tag">Up to 40% energy reduction →</span>
+      </div>
+      <div class="sol-card reveal reveal-delay-1">
+        <div class="sol-icon">⚡</div>
+        <h3>enPact Voltage Optimisation</h3>
+        <p>Transformer-based solution that steps down incoming voltage from 242V to an optimal ~220V — the design voltage for most equipment — delivering instant kWh savings across entire sites.</p>
+        <span class="sol-tag">Up to 19% energy reduction →</span>
+      </div>
+      <div class="sol-card reveal reveal-delay-2">
+        <div class="sol-icon">🔌</div>
+        <h3>enPact FilterPro</h3>
+        <p>Whole-site voltage harmonisation and waste energy filtration. Mitigates electrical noise from reactive power, load switching, and power quality issues for site-wide efficiency gains.</p>
+        <span class="sol-tag">Full power quality optimisation →</span>
+      </div>
+      <div class="sol-card reveal reveal-delay-3">
+        <div class="sol-icon">🧊</div>
+        <h3>enPact Maxwell for Chillers</h3>
+        <p>Advanced nanofluid heat transfer additive for chilled water systems. Improves heat exchange performance in closed-loop systems, reducing compressor load and overall system runtime.</p>
+        <span class="sol-tag">Reduced compressor load →</span>
+      </div>
+    </div>
+    <!-- Full width card -->
+    <div class="sol-card reveal" style="margin-top:24px">
+      <div class="sol-icon">📊</div>
+      <h3>Energy &amp; Carbon Management Platform</h3>
+      <p>Partnered with Univers, our real-time monitoring platform connects to sub-meters, sensors, and all enPact solutions — delivering actionable insights from high-level portfolio trends down to granular equipment performance. Track, verify, and optimise continuously.</p>
+      <span class="sol-tag">Real-time monitoring &amp; verification →</span>
+    </div>
+  </div>
+</section>
+
+<!-- HOW IT WORKS -->
+<section class="how" id="how">
+  <div class="container">
+    <div class="section-tag"><span class="line"></span> Deployment</div>
+    <h2 class="section-title">From Assessment to<br>Savings in Weeks</h2>
+    <div class="how-grid">
+      <div class="how-steps">
+        <div class="step reveal">
+          <div class="step-num">01</div>
+          <div>
+            <h4>Site Assessment &amp; Power Survey</h4>
+            <p>We conduct a comprehensive energy audit to identify inefficiencies and model potential savings across your estate — completely free of charge.</p>
+          </div>
+        </div>
+        <div class="step reveal reveal-delay-1">
+          <div class="step-num">02</div>
+          <div>
+            <h4>Custom Solution Design</h4>
+            <p>Every site is analysed for the best-fit combination of enPact technologies. We deliver an evidenced savings report with confirmed ROI projections.</p>
+          </div>
+        </div>
+        <div class="step reveal reveal-delay-2">
+          <div class="step-num">03</div>
+          <div>
+            <h4>Rapid Installation</h4>
+            <p>Our qualified engineers install solutions in hours — not weeks. All retrofit, zero downtime, no disruption to your daily operations.</p>
+          </div>
+        </div>
+        <div class="step reveal reveal-delay-3">
+          <div class="step-num">04</div>
+          <div>
+            <h4>Live Monitoring &amp; Optimisation</h4>
+            <p>From day one, track verified savings in real-time via our platform. Our data team monitors performance and generates monthly impact reports.</p>
+          </div>
+        </div>
+      </div>
+      <div class="how-visual reveal">
+        <div class="data-panel">
+          <div class="data-header">
+            <h4>enPact Performance Dashboard</h4>
+            <div class="live-dot">Live</div>
+          </div>
+          <div class="data-bars">
+            <div class="bar-row">
+              <span class="bar-label">HVAC</span>
+              <div class="bar-track"><div class="bar-fill green" style="--w:78%;width:78%">-34%</div></div>
+            </div>
+            <div class="bar-row">
+              <span class="bar-label">Refrigeration</span>
+              <div class="bar-track"><div class="bar-fill green" style="--w:62%;width:62%">-27%</div></div>
+            </div>
+            <div class="bar-row">
+              <span class="bar-label">Voltage</span>
+              <div class="bar-track"><div class="bar-fill green" style="--w:45%;width:45%">-19%</div></div>
+            </div>
+            <div class="bar-row">
+              <span class="bar-label">Chillers</span>
+              <div class="bar-track"><div class="bar-fill green" style="--w:52%;width:52%">-22%</div></div>
+            </div>
+          </div>
+          <div class="data-footer">
+            <div class="data-stat"><span>£47K</span><small>Annual Savings</small></div>
+            <div class="data-stat"><span>312</span><small>MWh Reduced</small></div>
+            <div class="data-stat"><span>86t</span><small>CO₂ Avoided</small></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- SECTORS -->
+<section class="sectors" id="sectors">
+  <div class="container">
+    <div class="sectors-header">
+      <div class="section-tag"><span class="line"></span> Sectors</div>
+      <h2 class="section-title">Built for Energy-Intensive<br>Operations</h2>
+      <p class="section-sub">Proven across 1,000+ sites in the UK's most demanding commercial environments.</p>
+    </div>
+    <div class="sectors-grid">
+      <div class="sector-card reveal">
+        <span class="sector-icon">🏨</span>
+        <h3>Hospitality</h3>
+        <p>Hotels, restaurants, and leisure venues — cut HVAC and kitchen refrigeration costs while maintaining guest comfort and food safety compliance.</p>
+      </div>
+      <div class="sector-card reveal reveal-delay-1">
+        <span class="sector-icon">🛒</span>
+        <h3>Food Retail</h3>
+        <p>Supermarkets and convenience stores — optimise refrigeration across entire estates, protect margins, and reduce carbon reporting obligations.</p>
+      </div>
+      <div class="sector-card reveal reveal-delay-2">
+        <span class="sector-icon">🏭</span>
+        <h3>Food Production</h3>
+        <p>Processing plants and cold storage — lower energy costs on production-critical cooling and freezer systems without compromising temperature integrity.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- CLIENTS -->
+<section class="clients">
+  <div class="container">
+    <div class="clients-header">
+      <div class="section-tag"><span class="line"></span> Trusted By</div>
+      <h2 class="section-title">Enterprise Partners</h2>
+    </div>
+    <div class="client-logos">
+      <span>NHS</span><span>BBC</span><span>Sodexo</span><span>B&Q</span><span>Co-operative</span>
+      <span>Coca-Cola</span><span>DHL</span><span>Greene King</span><span>Whitbread</span>
+      <span>Subway</span><span>Pizza Express</span><span>Next</span><span>Wickes</span>
+      <span>Pets at Home</span><span>The Gym Group</span><span>Newcastle University</span>
+    </div>
+  </div>
+</section>
+
+<!-- TESTIMONIALS -->
+<section class="testimonials" id="testimonials">
+  <div class="container">
+    <div class="section-tag"><span class="line"></span> Client Results</div>
+    <h2 class="section-title">Measurable Impact,<br>Verified by Data</h2>
+    <div class="test-grid">
+      <div class="test-card reveal">
+        <p class="test-quote">"Emissis cooling technology across our 4 NHS pilot sites is reducing energy consumption by an average 22%, delivering a staggering £407 per unit in annual saving."</p>
+        <div class="test-author">
+          <div class="test-avatar">TS</div>
+          <div>
+            <div class="test-name">Tom Stewart</div>
+            <div class="test-role">Net Zero Technical Innovation Manager, NHS</div>
+          </div>
+        </div>
+      </div>
+      <div class="test-card reveal reveal-delay-1">
+        <p class="test-quote">"I am very impressed with the proven performance delivering energy and cost savings. It has surpassed my expectations and we are actively endorsing it across our entire client base."</p>
+        <div class="test-author">
+          <div class="test-avatar">FR</div>
+          <div>
+            <div class="test-name">Frazer Russell</div>
+            <div class="test-role">Global Energy Manager, Sodexo</div>
+          </div>
+        </div>
+      </div>
+      <div class="test-card reveal reveal-delay-2">
+        <p class="test-quote">"The tailored solution perfectly aligned with our savings goals. The entire process was executed with commendable professionalism, resulting in significant savings for Tees Active."</p>
+        <div class="test-author">
+          <div class="test-avatar">DH</div>
+          <div>
+            <div class="test-name">Darren Humphrey</div>
+            <div class="test-role">Area Operations Manager, Tees Active</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- CTA -->
+<section class="cta-section" id="contact">
+  <div class="container">
+    <div class="section-tag"><span class="line"></span> Get Started</div>
+    <h2 class="section-title">Ready to Cut Energy<br>Costs by 20–40%?</h2>
+    <p class="section-sub">Request a free site assessment and receive a customised savings report — with guaranteed results from day one.</p>
+    <a href="mailto:enquiries@emissis.com" class="btn-primary" style="font-size:16px;padding:18px 40px">Request Free Assessment <span>→</span></a>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <div class="container">
+    <div class="footer-brand">
+      <a href="#" class="nav-logo">
+        <div class="logo-mark">E</div>
+        <span class="logo-text">emissis</span>
+      </a>
+      <p>Intelligent energy optimisation technology for enterprise. Reducing costs, carbon emissions, and complexity — with proven, data-verified results.</p>
+    </div>
+    <div class="footer-col">
+      <h4>Solutions</h4>
+      <a href="#">Cooling & Refrigeration</a>
+      <a href="#">Voltage Optimisation</a>
+      <a href="#">FilterPro</a>
+      <a href="#">Maxwell for Chillers</a>
+      <a href="#">Energy Platform</a>
+    </div>
+    <div class="footer-col">
+      <h4>Sectors</h4>
+      <a href="#">Hospitality</a>
+      <a href="#">Food Retail</a>
+      <a href="#">Food Production</a>
+    </div>
+    <div class="footer-col">
+      <h4>Contact</h4>
+      <a href="tel:+441642049024">+44 (0)1642 049024</a>
+      <a href="mailto:enquiries@emissis.com">enquiries@emissis.com</a>
+      <a href="#">2 Ellerbeck Court, Stokesley<br>Business Park, TS9 5PT</a>
+    </div>
+  </div>
+  <div class="container">
+    <div class="footer-bottom">
+      <p>© 2025 Emissis — Trading name of Electrical Mechanical & Cooling Ltd (Company No: 08405667)</p>
+      <div class="footer-legal">
+        <a href="#">Privacy Policy</a>
+        <a href="#">Cookie Policy</a>
+        <a href="#">Terms</a>
+      </div>
+    </div>
+  </div>
+</footer>
+
+<script>
+// Scroll reveal
+const reveals = document.querySelectorAll('.reveal');
+const observer = new IntersectionObserver((entries) => {
+  entries.forEach(e => { if (e.isIntersecting) { e.target.classList.add('visible'); observer.unobserve(e.target); }});
+}, { threshold: 0.15 });
+reveals.forEach(el => observer.observe(el));
+
+// Hero counter animation
+let counted = false;
+function animateCounter() {
+  if (counted) return;
+  counted = true;
+  const el = document.getElementById('hero-counter');
+  let val = 0;
+  const target = 32;
+  const step = () => {
+    val += 1;
+    el.textContent = val + '%';
+    if (val < target) requestAnimationFrame(step);
+  };
+  requestAnimationFrame(step);
+}
+setTimeout(animateCounter, 600);
+</script>
+</body>
+</html>
