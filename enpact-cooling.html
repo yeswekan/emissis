@@ -60,6 +60,79 @@ section{position:relative;z-index:1;padding:100px 0}
 .btn-primary{display:inline-flex;align-items:center;gap:10px;padding:16px 32px;background:var(--acc);color:var(--bg);font-weight:700;font-size:14px;border:none;border-radius:10px;cursor:pointer;text-decoration:none;letter-spacing:.3px;transition:all .3s}
 .btn-primary:hover{background:#00FF84;transform:translateY(-2px);box-shadow:0 8px 32px rgba(0,230,118,.25)}
 
+/* ORS CYCLE ANIMATION */
+.ors-cycle{background:var(--bg);overflow:hidden}
+.ors-layout{display:grid;grid-template-columns:1.1fr .9fr;gap:64px;align-items:center;margin-top:56px}
+.ors-visual{position:relative;width:100%;aspect-ratio:1.1;max-width:600px}
+
+/* SVG pipes */
+.ors-svg{width:100%;height:100%;position:absolute;inset:0}
+.pipe-bg{fill:none;stroke:rgba(255,255,255,.06);stroke-width:5;stroke-linecap:round;stroke-linejoin:round}
+.pipe-flow{fill:none;stroke:var(--acc);stroke-width:5;stroke-linecap:round;stroke-linejoin:round;stroke-dasharray:10 16}
+.pipe-flow.flowing{animation:flowDash 1s linear infinite}
+.pipe-flow.paused{stroke:rgba(255,255,255,.06);animation:none}
+@keyframes flowDash{to{stroke-dashoffset:-26}}
+
+/* Nodes */
+.ors-node{position:absolute;z-index:2}
+.node-box{background:var(--card);border:1.5px solid var(--brd);border-radius:14px;padding:18px 14px;text-align:center;transition:all .7s ease}
+.node-box.highlight-green{border-color:var(--brd-a);box-shadow:0 0 32px rgba(0,230,118,.08)}
+.node-box.highlight-blue{border-color:rgba(59,130,246,.35);box-shadow:0 0 32px rgba(59,130,246,.08)}
+.node-box.highlight-red{border-color:rgba(239,68,68,.35);box-shadow:0 0 32px rgba(239,68,68,.06)}
+.node-icon{width:40px;height:40px;border-radius:50%;display:flex;align-items:center;justify-content:center;margin:0 auto 10px;border:2px solid var(--brd);transition:all .7s}
+.node-icon.on{border-color:var(--acc);box-shadow:0 0 14px var(--acc-g)}
+.node-icon.on .n-dot{background:var(--acc);box-shadow:0 0 6px var(--acc)}
+.node-icon.off{border-color:rgba(239,68,68,.5)}
+.node-icon.off .n-dot{background:#EF4444;box-shadow:0 0 6px rgba(239,68,68,.5)}
+.node-icon.cool{border-color:rgba(59,130,246,.4);animation:coolPulse 2s ease-in-out infinite}
+@keyframes coolPulse{0%,100%{box-shadow:0 0 10px rgba(59,130,246,.1)}50%{box-shadow:0 0 20px rgba(59,130,246,.2)}}
+.n-dot{width:10px;height:10px;border-radius:50%;background:var(--t3);transition:all .7s}
+.node-label{font-family:var(--df);font-size:12px;font-weight:700;letter-spacing:-.2px}
+.node-sub{font-size:9px;color:var(--t3);margin-top:2px;line-height:1.2;transition:color .7s}
+
+/* Solenoid valve */
+.solenoid-node{position:absolute;z-index:5;top:50%;left:50%;transform:translate(-50%,-50%)}
+.sol-circle{width:52px;height:52px;border-radius:50%;background:var(--card);border:2px solid var(--brd);display:flex;align-items:center;justify-content:center;transition:all .7s;margin:0 auto}
+.sol-circle.open{border-color:var(--acc);box-shadow:0 0 20px var(--acc-g)}
+.sol-circle.closed{border-color:rgba(239,68,68,.5);box-shadow:0 0 20px rgba(239,68,68,.08)}
+.sol-x{font-size:18px;transition:all .4s}
+.sol-circle.closed .sol-x{transform:rotate(45deg);color:#EF4444}
+.sol-circle.open .sol-x{color:var(--acc)}
+.sol-label{font-size:9px;font-weight:700;text-transform:uppercase;letter-spacing:1px;text-align:center;margin-top:6px;transition:color .7s;color:var(--t3)}
+.sol-circle.open ~ .sol-label{color:var(--acc)}
+.sol-circle.closed ~ .sol-label{color:#EF4444}
+
+/* Superheat gauge */
+.sh-gauge{position:absolute;z-index:3;right:3%;top:50%;transform:translateY(-50%);display:flex;flex-direction:column;align-items:center;gap:6px}
+.sh-title{font-size:8px;font-weight:700;color:var(--t3);letter-spacing:1px;text-transform:uppercase}
+.sh-track{width:10px;height:140px;background:rgba(255,255,255,.04);border-radius:5px;position:relative;border:1px solid var(--brd);overflow:hidden}
+.sh-fill{position:absolute;bottom:0;left:0;right:0;border-radius:0 0 4px 4px;background:linear-gradient(to top,var(--acc2),var(--acc));transition:height 2s ease}
+.sh-fill.warn{background:linear-gradient(to top,#F59E0B,#EF4444)}
+.sh-val{font-family:var(--df);font-size:15px;font-weight:700;color:var(--acc);transition:color .7s}
+.sh-fill.warn ~ .sh-val,.sh-val.warn{color:#F59E0B}
+
+/* Phase panel */
+.ors-info{}
+.phase-insight{font-size:15px;color:var(--t2);line-height:1.7;padding:20px 24px;background:var(--card);border-radius:12px;border:1px solid var(--brd);border-left:3px solid var(--acc);margin-bottom:40px}
+.phase-cards{display:flex;flex-direction:column;gap:14px}
+.phase-card{padding:22px 24px;background:var(--card);border:1px solid var(--brd);border-radius:14px;transition:all .6s;position:relative;overflow:hidden}
+.phase-card::before{content:'';position:absolute;left:0;top:0;bottom:0;width:3px;background:var(--acc);opacity:0;transition:opacity .4s}
+.phase-card.active{border-color:var(--brd-a);background:var(--card-h)}
+.phase-card.active::before{opacity:1}
+.phase-num{font-family:var(--df);font-size:10px;font-weight:700;color:var(--t3);letter-spacing:1.5px;text-transform:uppercase;margin-bottom:4px;transition:color .4s}
+.phase-card.active .phase-num{color:var(--acc)}
+.phase-card h4{font-family:var(--df);font-size:15px;font-weight:700;margin-bottom:4px;letter-spacing:-.3px}
+.phase-card p{font-size:13px;color:var(--t3);line-height:1.55;transition:color .4s}
+.phase-card.active p{color:var(--t2)}
+.phase-progress{height:3px;background:rgba(255,255,255,.04);border-radius:2px;margin-top:32px;overflow:hidden}
+.phase-progress-fill{height:100%;background:var(--acc);border-radius:2px;width:0%}
+
+/* Responsive */
+@media(max-width:1024px){
+  .ors-layout{grid-template-columns:1fr;gap:48px}
+  .ors-visual{max-width:500px;margin:0 auto}
+}
+
 /* HOW IT WORKS - TECHNICAL */
 .tech-how{background:var(--bg2)}
 .tech-how-grid{display:grid;grid-template-columns:1fr 1fr;gap:80px;align-items:start;margin-top:64px}
@@ -150,6 +223,85 @@ footer{background:var(--bg);border-top:1px solid var(--brd);padding:48px 0 24px}
 .footer-links a{font-size:12px;color:var(--t3);text-decoration:none;transition:color .3s}
 .footer-links a:hover{color:var(--t2)}
 
+/* ORS CYCLE ANIMATION */
+.ors-section{background:var(--bg);overflow:hidden}
+.ors-header{text-align:center;margin-bottom:56px}
+.ors-header .section-sub{margin:0 auto}
+.ors-anim{position:relative;max-width:1000px;margin:0 auto;display:grid;grid-template-columns:1fr 320px;gap:40px;align-items:center}
+.ors-visual{position:relative;aspect-ratio:1;width:100%}
+
+/* Refrigeration loop ring */
+.loop-ring{position:absolute;inset:8%;border:2px solid var(--brd);border-radius:50%}
+.loop-ring-inner{position:absolute;inset:22%;border:1.5px dashed rgba(255,255,255,.04);border-radius:50%}
+
+/* Refrigerant particles */
+.refrigerant-track{position:absolute;inset:8%;border-radius:50%}
+.particle{position:absolute;width:7px;height:7px;border-radius:50%;background:var(--acc);box-shadow:0 0 12px var(--acc-g);offset-path:circle(50% at 50% 50%);animation:orbit 6s linear infinite;opacity:.9;transition:opacity .5s}
+.particle:nth-child(1){offset-distance:0%;animation-delay:0s}
+.particle:nth-child(2){offset-distance:15%;animation-delay:-.9s}
+.particle:nth-child(3){offset-distance:30%;animation-delay:-1.8s}
+.particle:nth-child(4){offset-distance:45%;animation-delay:-2.7s}
+.particle:nth-child(5){offset-distance:60%;animation-delay:-3.6s}
+.particle:nth-child(6){offset-distance:75%;animation-delay:-4.5s}
+@keyframes orbit{to{offset-distance:100%}}
+.ors-visual.phase-interrupt .particle,.ors-visual.phase-harvest .particle{animation-play-state:paused}
+.ors-visual.phase-harvest .particle{opacity:.4}
+
+/* 4 system nodes */
+.sys-node{position:absolute;width:72px;height:72px;border-radius:16px;background:var(--card);border:1.5px solid var(--brd);display:flex;flex-direction:column;align-items:center;justify-content:center;z-index:3;transition:all .6s}
+.sys-node svg{margin-bottom:4px}
+.sys-node span{font-size:9px;font-weight:600;color:var(--t3);text-transform:uppercase;letter-spacing:.5px;text-align:center;line-height:1.2}
+.node-evap{top:4%;left:50%;transform:translateX(-50%)}
+.node-comp{top:50%;right:4%;transform:translateY(-50%)}
+.node-cond{bottom:4%;left:50%;transform:translateX(-50%)}
+.node-valve{top:50%;left:4%;transform:translateY(-50%)}
+
+/* Active node highlights per phase */
+.ors-visual.phase-normal .node-comp{border-color:var(--acc);box-shadow:0 0 20px var(--acc-s)}
+.ors-visual.phase-interrupt .node-valve{border-color:#EF4444;box-shadow:0 0 20px rgba(239,68,68,.15)}
+.ors-visual.phase-interrupt .node-comp{border-color:rgba(239,68,68,.4)}
+.ors-visual.phase-harvest .node-evap{border-color:#3B82F6;box-shadow:0 0 20px rgba(59,130,246,.15)}
+.ors-visual.phase-restart .node-valve{border-color:var(--acc);box-shadow:0 0 20px var(--acc-s)}
+.ors-visual.phase-restart .node-comp{border-color:var(--acc);box-shadow:0 0 20px var(--acc-s)}
+
+/* Center superheat gauge */
+.sh-gauge{position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);z-index:4;text-align:center;width:120px;height:120px;border-radius:50%;background:var(--bg);border:2px solid var(--brd);display:flex;flex-direction:column;align-items:center;justify-content:center;transition:border-color .6s}
+.sh-gauge .sh-val{font-family:var(--df);font-size:32px;font-weight:700;color:var(--acc);line-height:1;transition:color .5s}
+.sh-gauge .sh-unit{font-size:10px;color:var(--t3);text-transform:uppercase;letter-spacing:1px;margin-top:2px}
+.sh-gauge .sh-label{font-size:10px;color:var(--t2);margin-top:4px;font-weight:600;letter-spacing:.3px}
+.ors-visual.phase-interrupt .sh-gauge{border-color:rgba(239,68,68,.3)}
+.ors-visual.phase-interrupt .sh-gauge .sh-val{color:#EF4444}
+.ors-visual.phase-harvest .sh-gauge{border-color:rgba(59,130,246,.3)}
+.ors-visual.phase-harvest .sh-gauge .sh-val{color:#3B82F6}
+
+/* Phase timeline */
+.phase-timeline{display:flex;flex-direction:column;gap:16px}
+.phase-card{padding:20px;border-radius:12px;border:1.5px solid var(--brd);background:var(--card);transition:all .5s;cursor:pointer;position:relative;overflow:hidden}
+.phase-card::before{content:'';position:absolute;left:0;top:0;bottom:0;width:3px;background:var(--acc);opacity:0;transition:opacity .4s}
+.phase-card.active{border-color:var(--brd-a);background:var(--card-h);transform:translateX(4px)}
+.phase-card.active::before{opacity:1}
+.phase-card.active.interrupt{border-color:rgba(239,68,68,.25)}
+.phase-card.active.interrupt::before{background:#EF4444}
+.phase-card.active.harvest{border-color:rgba(59,130,246,.25)}
+.phase-card.active.harvest::before{background:#3B82F6}
+.phase-num{font-size:10px;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;margin-bottom:6px;color:var(--acc);transition:color .4s}
+.phase-card.active.interrupt .phase-num{color:#EF4444}
+.phase-card.active.harvest .phase-num{color:#3B82F6}
+.phase-card h4{font-family:var(--df);font-size:15px;font-weight:700;margin-bottom:4px;letter-spacing:-.2px}
+.phase-card p{font-size:12px;color:var(--t3);line-height:1.55;transition:color .4s}
+.phase-card.active p{color:var(--t2)}
+
+/* Compressor status bar */
+.comp-status{margin-top:20px;padding:14px 16px;border-radius:10px;background:var(--bg2);border:1px solid var(--brd);display:flex;align-items:center;gap:12px}
+.comp-dot{width:10px;height:10px;border-radius:50%;background:var(--acc);transition:background .4s;flex-shrink:0}
+.comp-dot.off{background:#EF4444}
+.comp-dot.idle{background:#F59E0B;animation:pulse-amber 1.5s infinite}
+@keyframes pulse-amber{0%,100%{opacity:1}50%{opacity:.4}}
+.comp-text{font-size:12px;color:var(--t2)}
+.comp-text strong{color:var(--t1);font-weight:700}
+.energy-saved-bar{margin-top:12px;height:6px;border-radius:3px;background:rgba(255,255,255,.04);overflow:hidden}
+.energy-saved-fill{height:100%;border-radius:3px;background:linear-gradient(90deg,var(--acc2),var(--acc));transition:width 1s ease;width:0%}
+
 /* Scroll animations */
 .reveal{opacity:0;transform:translateY(28px);transition:all .7s cubic-bezier(.16,1,.3,1)}
 .reveal.visible{opacity:1;transform:translateY(0)}
@@ -190,6 +342,7 @@ footer{background:var(--bg);border-top:1px solid var(--brd);padding:48px 0 24px}
     </a>
     <ul class="nav-links">
       <li><a href="index.html" class="back-link">← Back to Home</a></li>
+      <li><a href="#ors-animation">ORS Technology</a></li>
       <li><a href="#how-it-works">How It Works</a></li>
       <li><a href="#applications">Applications</a></li>
       <li><a href="#case-studies">Case Studies</a></li>
@@ -225,6 +378,95 @@ footer{background:var(--bg);border-top:1px solid var(--brd);padding:48px 0 24px}
       <div class="hero-meta-item">
         <span>Zero</span>
         <small>Maintenance Required</small>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ORS CYCLE ANIMATION -->
+<section class="ors-cycle" id="ors-animation">
+  <div class="container">
+    <div class="section-tag"><span class="line"></span> The Core Innovation</div>
+    <h2 class="section-title">Optimised Refrigerant Supply</h2>
+    <p class="section-sub">Standard thermostats only monitor room temperature — causing compressors to run far longer than necessary. enPact monitors the <strong style="color:var(--t1)">superheat</strong> at the evaporator to optimise every compressor cycle.</p>
+    <div class="ors-layout">
+      <!-- Animated diagram -->
+      <div class="ors-visual">
+        <!-- SVG pipes connecting the components -->
+        <svg class="ors-svg" viewBox="0 0 500 450" preserveAspectRatio="xMidYMid meet">
+          <!-- Top pipe: evaporator → solenoid (coolant out) -->
+          <path class="pipe-bg" d="M165 110 L250 110 L250 195"/>
+          <path class="pipe-flow flowing" id="pipe-top" d="M165 110 L250 110 L250 195"/>
+          <!-- Bottom pipe: solenoid → compressor (return) -->
+          <path class="pipe-bg" d="M250 255 L250 340 L335 340"/>
+          <path class="pipe-flow flowing" id="pipe-bottom" d="M250 255 L250 340 L335 340"/>
+          <!-- Right pipe: compressor → evaporator (supply) -->
+          <path class="pipe-bg" d="M335 300 L430 300 L430 50 L95 50 L95 110"/>
+          <path class="pipe-flow flowing" id="pipe-return" d="M335 300 L430 300 L430 50 L95 50 L95 110"/>
+        </svg>
+
+        <!-- Evaporator node -->
+        <div class="ors-node" style="top:12%;left:3%;width:32%" id="node-evap">
+          <div class="node-box highlight-blue">
+            <div class="node-icon cool"><div class="n-dot" style="background:#3B82F6;box-shadow:0 0 6px rgba(59,130,246,.5)"></div></div>
+            <div class="node-label">Evaporator</div>
+            <div class="node-sub">Indoor unit — absorbs heat<br>Sensors ①② monitor coolant</div>
+          </div>
+        </div>
+
+        <!-- Compressor node -->
+        <div class="ors-node" style="bottom:10%;right:8%;width:32%" id="node-comp">
+          <div class="node-box" id="comp-box">
+            <div class="node-icon on" id="comp-icon"><div class="n-dot" id="comp-dot"></div></div>
+            <div class="node-label">Compressor</div>
+            <div class="node-sub" id="comp-status">Running — consuming power<br>80–90% of system energy</div>
+          </div>
+        </div>
+
+        <!-- Solenoid valve -->
+        <div class="solenoid-node" id="node-sol">
+          <div class="sol-circle open" id="sol-circle">
+            <span class="sol-x" id="sol-icon">⟡</span>
+          </div>
+          <div class="sol-label" id="sol-label">Open</div>
+        </div>
+
+        <!-- Superheat gauge -->
+        <div class="sh-gauge">
+          <div class="sh-title">Superheat</div>
+          <div class="sh-track">
+            <div class="sh-fill" id="sh-fill" style="height:30%"></div>
+          </div>
+          <div class="sh-val" id="sh-val">5°K</div>
+        </div>
+      </div>
+
+      <!-- Phase info panel -->
+      <div class="ors-info">
+        <div class="phase-insight">Compressors account for <strong style="color:var(--t1)">80–90%</strong> of a refrigeration system's energy consumption. By optimising their runtime through superheat monitoring, enPact delivers outsized savings of <strong style="color:var(--acc)">up to 40%</strong>.</div>
+        <div class="phase-cards">
+          <div class="phase-card" id="phase-0">
+            <div class="phase-num">Phase 1 — Monitor</div>
+            <h4>Assess Superheat</h4>
+            <p>Sensors measure coolant in/out temperatures to calculate superheat. System detects when evaporator reaches maximum cooling capacity.</p>
+          </div>
+          <div class="phase-card" id="phase-1">
+            <div class="phase-num">Phase 2 — Interrupt</div>
+            <h4>Close Solenoid Valve</h4>
+            <p>enPact closes the solenoid valve, stopping refrigerant flow. The compressor halts — preventing energy waste when cooling is already at maximum.</p>
+          </div>
+          <div class="phase-card" id="phase-2">
+            <div class="phase-num">Phase 3 — Harvest</div>
+            <h4>Latent Cooling Recovery</h4>
+            <p>Remaining refrigerant in the evaporator continues absorbing heat — extracting every unit of cooling energy that would otherwise be wasted.</p>
+          </div>
+          <div class="phase-card" id="phase-3">
+            <div class="phase-num">Phase 4 — Restart</div>
+            <h4>Soft-Start Compressor</h4>
+            <p>When superheat drops below the lower threshold, the solenoid reopens and the compressor restarts with soft-start protection.</p>
+          </div>
+        </div>
+        <div class="phase-progress"><div class="phase-progress-fill" id="progress-fill"></div></div>
       </div>
     </div>
   </div>
@@ -557,11 +799,186 @@ footer{background:var(--bg);border-top:1px solid var(--brd);padding:48px 0 24px}
 </footer>
 
 <script>
+// Scroll reveal
 const reveals = document.querySelectorAll('.reveal');
 const observer = new IntersectionObserver((entries) => {
   entries.forEach(e => { if (e.isIntersecting) { e.target.classList.add('visible'); observer.unobserve(e.target); }});
 }, { threshold: 0.12 });
 reveals.forEach(el => observer.observe(el));
+
+// ORS Cycle Animation
+(function() {
+  const phases = [
+    { name: 'monitor',  duration: 4000 },
+    { name: 'interrupt', duration: 3500 },
+    { name: 'harvest',  duration: 4500 },
+    { name: 'restart',  duration: 3000 }
+  ];
+  const totalDuration = phases.reduce((s, p) => s + p.duration, 0);
+
+  // Elements
+  const pipeTop = document.getElementById('pipe-top');
+  const pipeBottom = document.getElementById('pipe-bottom');
+  const pipeReturn = document.getElementById('pipe-return');
+  const compBox = document.getElementById('comp-box');
+  const compIcon = document.getElementById('comp-icon');
+  const compDot = document.getElementById('comp-dot');
+  const compStatus = document.getElementById('comp-status');
+  const solCircle = document.getElementById('sol-circle');
+  const solIcon = document.getElementById('sol-icon');
+  const solLabel = document.getElementById('sol-label');
+  const shFill = document.getElementById('sh-fill');
+  const shVal = document.getElementById('sh-val');
+  const progressFill = document.getElementById('progress-fill');
+  const phaseCards = [
+    document.getElementById('phase-0'),
+    document.getElementById('phase-1'),
+    document.getElementById('phase-2'),
+    document.getElementById('phase-3')
+  ];
+  const nodeEvap = document.getElementById('node-evap');
+
+  function setPhase(idx) {
+    // Reset all phase cards
+    phaseCards.forEach((c, i) => c.classList.toggle('active', i === idx));
+  }
+
+  function setPipes(flowing) {
+    const cls = flowing ? 'pipe-flow flowing' : 'pipe-flow paused';
+    pipeTop.setAttribute('class', cls);
+    pipeBottom.setAttribute('class', cls);
+    pipeReturn.setAttribute('class', cls);
+  }
+
+  function setCompressor(on) {
+    if (on) {
+      compBox.className = 'node-box highlight-green';
+      compIcon.className = 'node-icon on';
+      compDot.style.background = 'var(--acc)';
+      compDot.style.boxShadow = '0 0 6px var(--acc)';
+      compStatus.innerHTML = 'Running — consuming power<br>80–90% of system energy';
+    } else {
+      compBox.className = 'node-box highlight-red';
+      compIcon.className = 'node-icon off';
+      compDot.style.background = '#EF4444';
+      compDot.style.boxShadow = '0 0 6px rgba(239,68,68,.5)';
+      compStatus.innerHTML = 'Halted — zero energy draw<br>Saving power';
+    }
+  }
+
+  function setSolenoid(open) {
+    solCircle.className = open ? 'sol-circle open' : 'sol-circle closed';
+    solIcon.textContent = open ? '⟡' : '✕';
+    solLabel.textContent = open ? 'Open' : 'Closed';
+  }
+
+  function setSuperheat(pct, kelvin, warn) {
+    shFill.style.height = pct + '%';
+    shFill.className = warn ? 'sh-fill warn' : 'sh-fill';
+    shVal.textContent = kelvin + '°K';
+    shVal.className = warn ? 'sh-val warn' : 'sh-val';
+  }
+
+  function setEvapGlow(harvesting) {
+    const box = nodeEvap.querySelector('.node-box');
+    if (harvesting) {
+      box.className = 'node-box highlight-blue';
+      box.style.boxShadow = '0 0 40px rgba(59,130,246,.15)';
+    } else {
+      box.className = 'node-box highlight-blue';
+      box.style.boxShadow = '';
+    }
+  }
+
+  let startTime = null;
+  let animRunning = false;
+
+  function animate(timestamp) {
+    if (!animRunning) return;
+    if (!startTime) startTime = timestamp;
+    const elapsed = (timestamp - startTime) % totalDuration;
+
+    // Determine current phase
+    let cumulative = 0;
+    let currentPhase = 0;
+    let phaseElapsed = 0;
+    for (let i = 0; i < phases.length; i++) {
+      if (elapsed < cumulative + phases[i].duration) {
+        currentPhase = i;
+        phaseElapsed = elapsed - cumulative;
+        break;
+      }
+      cumulative += phases[i].duration;
+    }
+
+    const phaseProgress = phaseElapsed / phases[currentPhase].duration;
+
+    // Overall progress
+    progressFill.style.width = ((elapsed / totalDuration) * 100) + '%';
+
+    setPhase(currentPhase);
+
+    switch(currentPhase) {
+      case 0: // Monitor — superheat rising, everything running
+        setPipes(true);
+        setCompressor(true);
+        setSolenoid(true);
+        setEvapGlow(false);
+        // Superheat rises from 5 to 12
+        const shRise = 5 + phaseProgress * 7;
+        const shPctRise = 25 + phaseProgress * 55;
+        setSuperheat(shPctRise, shRise.toFixed(1), shRise > 10);
+        break;
+
+      case 1: // Interrupt — solenoid closes, compressor stops, flow stops
+        const interruptProg = Math.min(phaseProgress * 3, 1); // quick transition
+        setPipes(interruptProg < 0.3);
+        setCompressor(false);
+        setSolenoid(false);
+        setEvapGlow(false);
+        setSuperheat(80, '12.0', true);
+        break;
+
+      case 2: // Harvest — no flow, compressor off, evaporator glows, superheat drops
+        setPipes(false);
+        setCompressor(false);
+        setSolenoid(false);
+        setEvapGlow(true);
+        // Superheat drops from 12 to 3
+        const shDrop = 12 - phaseProgress * 9;
+        const shPctDrop = 80 - phaseProgress * 60;
+        setSuperheat(shPctDrop, shDrop.toFixed(1), shDrop > 6);
+        break;
+
+      case 3: // Restart — solenoid opens, compressor starts, flow resumes
+        const restartProg = Math.min(phaseProgress * 2.5, 1);
+        setPipes(restartProg > 0.3);
+        setCompressor(true);
+        setSolenoid(true);
+        setEvapGlow(false);
+        // Superheat rises from 3 to 5
+        const shRestart = 3 + phaseProgress * 2;
+        const shPctRestart = 20 + phaseProgress * 5;
+        setSuperheat(shPctRestart, shRestart.toFixed(1), false);
+        break;
+    }
+
+    requestAnimationFrame(animate);
+  }
+
+  // Start animation when section is visible
+  const orsSection = document.querySelector('.ors-cycle');
+  const orsObserver = new IntersectionObserver((entries) => {
+    entries.forEach(e => {
+      if (e.isIntersecting && !animRunning) {
+        animRunning = true;
+        startTime = null;
+        requestAnimationFrame(animate);
+      }
+    });
+  }, { threshold: 0.2 });
+  orsObserver.observe(orsSection);
+})();
 </script>
 </body>
 </html>
