@@ -440,63 +440,59 @@ footer{background:var(--bg);border-top:1px solid var(--brd);padding:48px 0 24px}
     <div class="ors-layout ors-layout-full">
       <!-- Full schematic animated diagram -->
       <div class="ors-visual-full" id="ors-visual-full">
-        <svg viewBox="0 0 880 520" preserveAspectRatio="xMidYMid meet" class="schematic-svg" id="schematic-svg">
+        <svg viewBox="0 0 880 620" preserveAspectRatio="xMidYMid meet" class="schematic-svg" id="schematic-svg">
           <defs>
-            <!-- Arrowhead markers -->
             <marker id="arrow-cold" markerWidth="8" markerHeight="6" refX="7" refY="3" orient="auto"><path d="M0,0 L8,3 L0,6" fill="#38BDF8" opacity=".8"/></marker>
             <marker id="arrow-hot" markerWidth="8" markerHeight="6" refX="7" refY="3" orient="auto"><path d="M0,0 L8,3 L0,6" fill="#F87171" opacity=".8"/></marker>
-            <marker id="arrow-liq" markerWidth="8" markerHeight="6" refX="7" refY="3" orient="auto"><path d="M0,0 L8,3 L0,6" fill="#A78BFA" opacity=".8"/></marker>
             <marker id="arrow-gas" markerWidth="8" markerHeight="6" refX="7" refY="3" orient="auto"><path d="M0,0 L8,3 L0,6" fill="#FBBF24" opacity=".8"/></marker>
-            <marker id="arrow-acc" markerWidth="8" markerHeight="6" refX="7" refY="3" orient="auto"><path d="M0,0 L8,3 L0,6" fill="#00E676" opacity=".8"/></marker>
-            <!-- Glow filter -->
-            <filter id="glow-green"><feGaussianBlur stdDeviation="3" result="g"/><feMerge><feMergeNode in="g"/><feMergeNode in="SourceGraphic"/></feMerge></filter>
-            <filter id="glow-blue"><feGaussianBlur stdDeviation="4" result="g"/><feMerge><feMergeNode in="g"/><feMergeNode in="SourceGraphic"/></feMerge></filter>
-            <filter id="glow-red"><feGaussianBlur stdDeviation="3" result="g"/><feMerge><feMergeNode in="g"/><feMergeNode in="SourceGraphic"/></feMerge></filter>
           </defs>
 
           <!-- ==================== UNIT BOXES ==================== -->
-          <!-- Indoor Unit box -->
-          <rect x="30" y="60" width="360" height="340" rx="16" fill="none" stroke="rgba(56,189,248,.12)" stroke-width="1.5" stroke-dasharray="8 4" id="indoor-box"/>
-          <text x="210" y="88" text-anchor="middle" fill="#38BDF8" font-family="Urbanist,sans-serif" font-size="13" font-weight="700" letter-spacing="1">INDOOR UNIT</text>
+          <rect x="30" y="60" width="380" height="360" rx="16" fill="none" stroke="rgba(56,189,248,.12)" stroke-width="1.5" stroke-dasharray="8 4" id="indoor-box"/>
+          <text x="220" y="88" text-anchor="middle" fill="#38BDF8" font-family="Urbanist,sans-serif" font-size="13" font-weight="700" letter-spacing="1">INDOOR UNIT</text>
 
-          <!-- Outdoor Unit box -->
-          <rect x="490" y="60" width="360" height="340" rx="16" fill="none" stroke="rgba(248,113,113,.12)" stroke-width="1.5" stroke-dasharray="8 4" id="outdoor-box"/>
+          <rect x="490" y="60" width="360" height="360" rx="16" fill="none" stroke="rgba(248,113,113,.12)" stroke-width="1.5" stroke-dasharray="8 4" id="outdoor-box"/>
           <text x="670" y="88" text-anchor="middle" fill="#F87171" font-family="Urbanist,sans-serif" font-size="13" font-weight="700" letter-spacing="1">OUTDOOR UNIT</text>
 
-          <!-- ==================== REFRIGERANT PIPES (background) ==================== -->
-          <!-- Path A: Expansion Valve → Evaporator coil (cold liquid, cyan) -->
-          <path d="M230,195 L120,195 L120,240" stroke="rgba(255,255,255,.06)" stroke-width="4" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
-          <!-- Path B: Evaporator coil → Suction line out (low pressure gas, yellow) -->
-          <path d="M120,310 L120,350 L560,350" stroke="rgba(255,255,255,.06)" stroke-width="4" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
-          <!-- Path C: Compressor → Condenser coil (hot gas, red) -->
-          <path d="M620,350 L700,350 L700,310" stroke="rgba(255,255,255,.06)" stroke-width="4" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
-          <!-- Path D: Condenser coil → Liquid line → Solenoid (high pressure liquid, purple) -->
-          <path d="M700,200 L700,155 L440,155 L440,195 L330,195" stroke="rgba(255,255,255,.06)" stroke-width="4" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
+          <!-- ==================== REFRIGERANT PIPES (background traces) ==================== -->
+          <!-- Pipe A: Expansion Valve → Evaporator (cold, cyan) -->
+          <path d="M215,195 L120,195 L120,240" stroke="rgba(255,255,255,.06)" stroke-width="4" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
+          <!-- Pipe E: Solenoid → Expansion Valve (liquid, purple) — THE MISSING LINK -->
+          <path d="M308,195 L248,195" stroke="rgba(255,255,255,.06)" stroke-width="4" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
+          <!-- Pipe B: Evaporator → Compressor (suction gas, yellow) -->
+          <path d="M120,310 L120,370 L560,370" stroke="rgba(255,255,255,.06)" stroke-width="4" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
+          <!-- Pipe C: Compressor → Condenser (hot gas, red) -->
+          <path d="M620,370 L720,370 L720,310" stroke="rgba(255,255,255,.06)" stroke-width="4" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
+          <!-- Pipe D: Condenser → Liquid line → Solenoid (liquid, purple) -->
+          <path d="M720,200 L720,155 L440,155 L440,195 L352,195" stroke="rgba(255,255,255,.06)" stroke-width="4" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
 
           <!-- ==================== REFRIGERANT PIPES (animated flow) ==================== -->
-          <!-- Path A: Expansion Valve → Evaporator (cyan) -->
-          <path d="M230,195 L120,195 L120,240" stroke="#38BDF8" stroke-width="4" fill="none" stroke-linecap="round" stroke-linejoin="round" stroke-dasharray="10 14" opacity=".9" id="pipe-a" class="pipe-animated">
+          <!-- Pipe A: Expansion Valve → Evaporator (cyan) -->
+          <path d="M215,195 L120,195 L120,240" stroke="#38BDF8" stroke-width="4" fill="none" stroke-linecap="round" stroke-linejoin="round" stroke-dasharray="10 14" opacity=".9" id="pipe-a" class="pipe-animated">
             <animate attributeName="stroke-dashoffset" from="0" to="-24" dur="0.8s" repeatCount="indefinite"/>
           </path>
-          <!-- Path B: Evaporator → Compressor (yellow/green) -->
-          <path d="M120,310 L120,350 L560,350" stroke="#FBBF24" stroke-width="4" fill="none" stroke-linecap="round" stroke-linejoin="round" stroke-dasharray="10 14" opacity=".7" id="pipe-b" class="pipe-animated">
+          <!-- Pipe E: Solenoid → Expansion Valve (purple) — THE MISSING LINK -->
+          <path d="M308,195 L248,195" stroke="#A78BFA" stroke-width="4" fill="none" stroke-linecap="round" stroke-linejoin="round" stroke-dasharray="10 14" opacity=".7" id="pipe-e" class="pipe-animated">
             <animate attributeName="stroke-dashoffset" from="0" to="-24" dur="0.8s" repeatCount="indefinite"/>
           </path>
-          <!-- Path C: Compressor → Condenser (red/hot) -->
-          <path d="M620,350 L700,350 L700,310" stroke="#F87171" stroke-width="4" fill="none" stroke-linecap="round" stroke-linejoin="round" stroke-dasharray="10 14" opacity=".7" id="pipe-c" class="pipe-animated">
+          <!-- Pipe B: Evaporator → Compressor (yellow) -->
+          <path d="M120,310 L120,370 L560,370" stroke="#FBBF24" stroke-width="4" fill="none" stroke-linecap="round" stroke-linejoin="round" stroke-dasharray="10 14" opacity=".7" id="pipe-b" class="pipe-animated">
             <animate attributeName="stroke-dashoffset" from="0" to="-24" dur="0.8s" repeatCount="indefinite"/>
           </path>
-          <!-- Path D: Condenser → Solenoid (purple liquid) -->
-          <path d="M700,200 L700,155 L440,155 L440,195 L330,195" stroke="#A78BFA" stroke-width="4" fill="none" stroke-linecap="round" stroke-linejoin="round" stroke-dasharray="10 14" opacity=".7" id="pipe-d" class="pipe-animated">
+          <!-- Pipe C: Compressor → Condenser (red) -->
+          <path d="M620,370 L720,370 L720,310" stroke="#F87171" stroke-width="4" fill="none" stroke-linecap="round" stroke-linejoin="round" stroke-dasharray="10 14" opacity=".7" id="pipe-c" class="pipe-animated">
+            <animate attributeName="stroke-dashoffset" from="0" to="-24" dur="0.8s" repeatCount="indefinite"/>
+          </path>
+          <!-- Pipe D: Condenser → Solenoid (purple) -->
+          <path d="M720,200 L720,155 L440,155 L440,195 L352,195" stroke="#A78BFA" stroke-width="4" fill="none" stroke-linecap="round" stroke-linejoin="round" stroke-dasharray="10 14" opacity=".7" id="pipe-d" class="pipe-animated">
             <animate attributeName="stroke-dashoffset" from="0" to="-24" dur="0.8s" repeatCount="indefinite"/>
           </path>
 
           <!-- ==================== EVAPORATOR COIL ==================== -->
           <g id="evap-group">
             <rect x="80" y="240" width="80" height="70" rx="8" fill="rgba(56,189,248,.06)" stroke="rgba(56,189,248,.25)" stroke-width="1.5" id="evap-coil-bg"/>
-            <!-- Coil zigzag -->
             <path d="M95,252 L145,252 L145,262 L95,262 L95,272 L145,272 L145,282 L95,282 L95,292 L145,292 L145,300" stroke="#38BDF8" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round" opacity=".7"/>
-            <text x="120" y="322" text-anchor="middle" fill="#38BDF8" font-family="Urbanist,sans-serif" font-size="10" font-weight="600">EVAPORATOR</text>
+            <text x="120" y="324" text-anchor="middle" fill="#38BDF8" font-family="Urbanist,sans-serif" font-size="10" font-weight="600">EVAPORATOR</text>
           </g>
 
           <!-- Cold air arrow -->
@@ -509,26 +505,26 @@ footer{background:var(--bg);border-top:1px solid var(--brd);padding:48px 0 24px}
           </g>
 
           <!-- Fan (indoor) -->
-          <g id="indoor-fan" transform="translate(220, 268)">
+          <g id="indoor-fan" transform="translate(220, 275)">
             <circle cx="0" cy="0" r="20" fill="rgba(255,255,255,.03)" stroke="rgba(255,255,255,.08)" stroke-width="1"/>
             <g id="fan-blades-indoor">
               <path d="M0,-14 Q8,-4 0,0 Q-8,-4 0,-14Z" fill="rgba(255,255,255,.25)"/>
               <path d="M12,7 Q4,12 0,0 Q8,2 12,7Z" fill="rgba(255,255,255,.25)"/>
               <path d="M-12,7 Q-4,12 0,0 Q-8,2 -12,7Z" fill="rgba(255,255,255,.25)"/>
             </g>
-            <animateTransform xlink:href="#fan-blades-indoor" attributeName="transform" type="rotate" from="0" to="360" dur="1.2s" repeatCount="indefinite" id="fan-indoor-spin"/>
+            <animateTransform xlink:href="#fan-blades-indoor" attributeName="transform" type="rotate" from="0" to="360" dur="1.2s" repeatCount="indefinite"/>
             <text x="0" y="34" text-anchor="middle" fill="rgba(255,255,255,.3)" font-family="Urbanist,sans-serif" font-size="8" font-weight="600">FAN</text>
           </g>
 
           <!-- Space Air label -->
           <g opacity=".5">
-            <path d="M310,268 L270,268" stroke="#FBBF24" stroke-width="1.5" fill="none" marker-end="url(#arrow-gas)"/>
-            <text x="330" y="272" fill="#FBBF24" font-family="Urbanist,sans-serif" font-size="8" font-weight="600" letter-spacing=".5">SPACE AIR</text>
+            <path d="M320,275 L270,275" stroke="#FBBF24" stroke-width="1.5" fill="none" marker-end="url(#arrow-gas)"/>
+            <text x="340" y="279" fill="#FBBF24" font-family="Urbanist,sans-serif" font-size="8" font-weight="600" letter-spacing=".5">SPACE AIR</text>
           </g>
 
           <!-- ==================== EXPANSION VALVE ==================== -->
           <g id="expansion-group" transform="translate(230, 195)">
-            <circle cx="0" cy="0" r="16" fill="var(--card)" stroke="rgba(255,255,255,.12)" stroke-width="1.5"/>
+            <circle cx="0" cy="0" r="16" fill="var(--card)" stroke="rgba(255,255,255,.15)" stroke-width="1.5"/>
             <text x="0" y="1" text-anchor="middle" fill="rgba(255,255,255,.5)" font-family="Urbanist,sans-serif" font-size="12">⊗</text>
             <text x="0" y="-24" text-anchor="middle" fill="rgba(255,255,255,.4)" font-family="Urbanist,sans-serif" font-size="8" font-weight="600" letter-spacing=".5">EXPANSION</text>
             <text x="0" y="-14" text-anchor="middle" fill="rgba(255,255,255,.4)" font-family="Urbanist,sans-serif" font-size="8" font-weight="600" letter-spacing=".5">VALVE</text>
@@ -544,109 +540,168 @@ footer{background:var(--bg);border-top:1px solid var(--brd);padding:48px 0 24px}
 
           <!-- ==================== CONDENSER COIL ==================== -->
           <g id="cond-group">
-            <rect x="660" y="200" width="80" height="70" rx="8" fill="rgba(248,113,113,.05)" stroke="rgba(248,113,113,.2)" stroke-width="1.5" id="cond-coil-bg"/>
-            <!-- Coil zigzag -->
-            <path d="M675,212 L725,212 L725,222 L675,222 L675,232 L725,232 L725,242 L675,242 L675,252 L725,252 L725,260" stroke="#F87171" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round" opacity=".5"/>
-            <text x="700" y="190" text-anchor="middle" fill="#F87171" font-family="Urbanist,sans-serif" font-size="10" font-weight="600">CONDENSER</text>
+            <rect x="680" y="200" width="80" height="70" rx="8" fill="rgba(248,113,113,.05)" stroke="rgba(248,113,113,.2)" stroke-width="1.5" id="cond-coil-bg"/>
+            <path d="M695,212 L745,212 L745,222 L695,222 L695,232 L745,232 L745,242 L695,242 L695,252 L745,252 L745,260" stroke="#F87171" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round" opacity=".5"/>
+            <text x="720" y="190" text-anchor="middle" fill="#F87171" font-family="Urbanist,sans-serif" font-size="10" font-weight="600">CONDENSER</text>
           </g>
 
           <!-- Hot air arrow -->
           <g id="hot-air-group" opacity=".7">
-            <path d="M752,240 L790,240" stroke="#F87171" stroke-width="2.5" fill="none" marker-end="url(#arrow-hot)" stroke-dasharray="4 3">
+            <path d="M772,240 L810,240" stroke="#F87171" stroke-width="2.5" fill="none" marker-end="url(#arrow-hot)" stroke-dasharray="4 3">
               <animate attributeName="stroke-dashoffset" from="0" to="-7" dur="0.6s" repeatCount="indefinite"/>
             </path>
-            <rect x="798" y="230" width="34" height="20" rx="4" fill="rgba(248,113,113,.1)" stroke="rgba(248,113,113,.2)" stroke-width="1"/>
-            <text x="815" y="244" text-anchor="middle" fill="#F87171" font-family="Urbanist,sans-serif" font-size="9" font-weight="700">HOT</text>
+            <rect x="818" y="230" width="34" height="20" rx="4" fill="rgba(248,113,113,.1)" stroke="rgba(248,113,113,.2)" stroke-width="1"/>
+            <text x="835" y="244" text-anchor="middle" fill="#F87171" font-family="Urbanist,sans-serif" font-size="9" font-weight="700">HOT</text>
           </g>
 
           <!-- Fan (outdoor) -->
-          <g id="outdoor-fan" transform="translate(590, 240)">
+          <g id="outdoor-fan" transform="translate(590, 245)">
             <circle cx="0" cy="0" r="20" fill="rgba(255,255,255,.03)" stroke="rgba(255,255,255,.08)" stroke-width="1"/>
             <g id="fan-blades-outdoor">
               <path d="M0,-14 Q8,-4 0,0 Q-8,-4 0,-14Z" fill="rgba(255,255,255,.25)"/>
               <path d="M12,7 Q4,12 0,0 Q8,2 12,7Z" fill="rgba(255,255,255,.25)"/>
               <path d="M-12,7 Q-4,12 0,0 Q-8,2 -12,7Z" fill="rgba(255,255,255,.25)"/>
             </g>
-            <animateTransform xlink:href="#fan-blades-outdoor" attributeName="transform" type="rotate" from="0" to="360" dur="1s" repeatCount="indefinite" id="fan-outdoor-spin"/>
+            <animateTransform xlink:href="#fan-blades-outdoor" attributeName="transform" type="rotate" from="0" to="360" dur="1s" repeatCount="indefinite"/>
             <text x="0" y="34" text-anchor="middle" fill="rgba(255,255,255,.3)" font-family="Urbanist,sans-serif" font-size="8" font-weight="600">FAN</text>
           </g>
 
           <!-- Ambient Air label -->
           <g opacity=".5">
-            <path d="M530,240 L560,240" stroke="#FBBF24" stroke-width="1.5" fill="none" marker-end="url(#arrow-gas)"/>
-            <text x="517" y="244" text-anchor="end" fill="#FBBF24" font-family="Urbanist,sans-serif" font-size="8" font-weight="600" letter-spacing=".5">AMBIENT</text>
+            <path d="M530,245 L560,245" stroke="#FBBF24" stroke-width="1.5" fill="none" marker-end="url(#arrow-gas)"/>
+            <text x="517" y="249" text-anchor="end" fill="#FBBF24" font-family="Urbanist,sans-serif" font-size="8" font-weight="600" letter-spacing=".5">AMBIENT</text>
           </g>
 
           <!-- ==================== COMPRESSOR ==================== -->
-          <g id="comp-group" transform="translate(590, 350)">
+          <g id="comp-group" transform="translate(590, 370)">
             <circle cx="0" cy="0" r="28" fill="var(--card)" stroke="rgba(0,230,118,.3)" stroke-width="2" id="comp-circle"/>
             <circle cx="0" cy="0" r="18" fill="none" stroke="rgba(0,230,118,.15)" stroke-width="1" id="comp-inner"/>
-            <!-- Piston icon -->
             <line x1="-8" y1="-6" x2="8" y2="6" stroke="#00E676" stroke-width="2.5" stroke-linecap="round" opacity=".8" id="comp-piston"/>
             <circle cx="0" cy="0" r="4" fill="#00E676" opacity=".6" id="comp-center-dot"/>
-            <text x="0" y="46" text-anchor="middle" fill="#00E676" font-family="Urbanist,sans-serif" font-size="11" font-weight="700" letter-spacing=".5" id="comp-label-svg">COMPRESSOR</text>
-            <text x="0" y="58" text-anchor="middle" font-family="Urbanist,sans-serif" font-size="9" font-weight="600" id="comp-status-svg" fill="rgba(0,230,118,.6)">RUNNING</text>
+            <text x="42" y="-2" text-anchor="start" fill="#00E676" font-family="Urbanist,sans-serif" font-size="11" font-weight="700" letter-spacing=".5" id="comp-label-svg">COMPRESSOR</text>
+            <text x="42" y="10" text-anchor="start" font-family="Urbanist,sans-serif" font-size="9" font-weight="600" id="comp-status-svg" fill="rgba(0,230,118,.6)">RUNNING</text>
           </g>
 
-          <!-- ==================== SENSOR BADGES ==================== -->
-          <!-- Sensor 1: Coolant IN (on pipe entering evaporator) -->
+          <!-- ==================== SUPERHEAT GAUGE ==================== -->
+          <g id="sh-gauge-svg" transform="translate(455, 270)">
+            <rect x="-42" y="-50" width="84" height="100" rx="10" fill="var(--card)" stroke="rgba(255,255,255,.08)" stroke-width="1.5" id="sh-bg"/>
+            <text x="0" y="-34" text-anchor="middle" fill="rgba(255,255,255,.35)" font-family="Urbanist,sans-serif" font-size="8" font-weight="700" letter-spacing="1">SUPERHEAT</text>
+            <rect x="-4" y="-22" width="8" height="50" rx="4" fill="rgba(255,255,255,.05)" stroke="rgba(255,255,255,.06)" stroke-width="1"/>
+            <rect x="-3" y="14" width="6" height="14" rx="3" fill="#00E676" id="sh-bar-fill"/>
+            <text x="0" y="46" text-anchor="middle" font-family="Urbanist,sans-serif" font-size="18" font-weight="700" fill="#00E676" id="sh-value-svg">5°K</text>
+          </g>
+
+          <!-- ==================== ALL 8 SENSOR BADGES WITH LABELS ==================== -->
+          <!-- Sensor 1: Coolant IN — on pipe entering evaporator top -->
           <g class="sensor-badge" id="sensor-1">
-            <rect x="126" y="185" width="20" height="20" rx="4" fill="rgba(251,191,36,.1)" stroke="rgba(251,191,36,.3)" stroke-width="1"/>
-            <text x="136" y="199" text-anchor="middle" fill="#FBBF24" font-family="Urbanist,sans-serif" font-size="10" font-weight="700">1</text>
+            <rect x="160" y="182" width="22" height="22" rx="5" fill="rgba(251,191,36,.12)" stroke="rgba(251,191,36,.4)" stroke-width="1.5"/>
+            <text x="171" y="197" text-anchor="middle" fill="#FBBF24" font-family="Urbanist,sans-serif" font-size="11" font-weight="700">1</text>
           </g>
-          <!-- Sensor 2: Coolant OUT (on pipe leaving evaporator) -->
+          <!-- Sensor 2: Coolant OUT — on pipe leaving evaporator bottom -->
           <g class="sensor-badge" id="sensor-2">
-            <rect x="126" y="330" width="20" height="20" rx="4" fill="rgba(251,191,36,.1)" stroke="rgba(251,191,36,.3)" stroke-width="1"/>
-            <text x="136" y="344" text-anchor="middle" fill="#FBBF24" font-family="Urbanist,sans-serif" font-size="10" font-weight="700">2</text>
+            <rect x="130" y="336" width="22" height="22" rx="5" fill="rgba(251,191,36,.12)" stroke="rgba(251,191,36,.4)" stroke-width="1.5"/>
+            <text x="141" y="351" text-anchor="middle" fill="#FBBF24" font-family="Urbanist,sans-serif" font-size="11" font-weight="700">2</text>
           </g>
-          <!-- Sensor 3: Space Air Temp -->
+          <!-- Sensor 3: Space Air Temp — near indoor fan -->
           <g class="sensor-badge" id="sensor-3">
-            <rect x="280" y="285" width="20" height="20" rx="4" fill="rgba(251,191,36,.1)" stroke="rgba(251,191,36,.3)" stroke-width="1"/>
-            <text x="290" y="299" text-anchor="middle" fill="#FBBF24" font-family="Urbanist,sans-serif" font-size="10" font-weight="700">3</text>
+            <rect x="278" y="296" width="22" height="22" rx="5" fill="rgba(251,191,36,.12)" stroke="rgba(251,191,36,.4)" stroke-width="1.5"/>
+            <text x="289" y="311" text-anchor="middle" fill="#FBBF24" font-family="Urbanist,sans-serif" font-size="11" font-weight="700">3</text>
           </g>
-          <!-- Sensor 7: Liquid line -->
+          <!-- Sensor 4: Product Temp — bottom left of indoor unit -->
+          <g class="sensor-badge" id="sensor-4">
+            <rect x="48" y="380" width="22" height="22" rx="5" fill="rgba(251,191,36,.12)" stroke="rgba(251,191,36,.4)" stroke-width="1.5"/>
+            <text x="59" y="395" text-anchor="middle" fill="#FBBF24" font-family="Urbanist,sans-serif" font-size="11" font-weight="700">4</text>
+          </g>
+          <!-- Sensor 5: Door Open — top-left outside indoor box -->
+          <g class="sensor-badge" id="sensor-5">
+            <rect x="48" y="104" width="22" height="22" rx="5" fill="rgba(251,191,36,.12)" stroke="rgba(251,191,36,.4)" stroke-width="1.5"/>
+            <text x="59" y="119" text-anchor="middle" fill="#FBBF24" font-family="Urbanist,sans-serif" font-size="11" font-weight="700">5</text>
+          </g>
+          <!-- Sensor 6: Space at a Distance — far left outside -->
+          <g class="sensor-badge" id="sensor-6">
+            <rect x="48" y="148" width="22" height="22" rx="5" fill="rgba(251,191,36,.12)" stroke="rgba(251,191,36,.4)" stroke-width="1.5"/>
+            <text x="59" y="163" text-anchor="middle" fill="#FBBF24" font-family="Urbanist,sans-serif" font-size="11" font-weight="700">6</text>
+          </g>
+          <!-- Sensor 7: Liquid Line — on liquid pipe between condenser and solenoid -->
           <g class="sensor-badge" id="sensor-7">
-            <rect x="430" y="137" width="20" height="20" rx="4" fill="rgba(251,191,36,.1)" stroke="rgba(251,191,36,.3)" stroke-width="1"/>
-            <text x="440" y="151" text-anchor="middle" fill="#FBBF24" font-family="Urbanist,sans-serif" font-size="10" font-weight="700">7</text>
+            <rect x="429" y="138" width="22" height="22" rx="5" fill="rgba(251,191,36,.12)" stroke="rgba(251,191,36,.4)" stroke-width="1.5"/>
+            <text x="440" y="153" text-anchor="middle" fill="#FBBF24" font-family="Urbanist,sans-serif" font-size="11" font-weight="700">7</text>
           </g>
-          <!-- Sensor 8: Compressor -->
+          <!-- Sensor 8: Compressor — near compressor -->
           <g class="sensor-badge" id="sensor-8">
-            <rect x="625" y="340" width="20" height="20" rx="4" fill="rgba(251,191,36,.1)" stroke="rgba(251,191,36,.3)" stroke-width="1"/>
-            <text x="635" y="354" text-anchor="middle" fill="#FBBF24" font-family="Urbanist,sans-serif" font-size="10" font-weight="700">8</text>
+            <rect x="625" y="352" width="22" height="22" rx="5" fill="rgba(251,191,36,.12)" stroke="rgba(251,191,36,.4)" stroke-width="1.5"/>
+            <text x="636" y="367" text-anchor="middle" fill="#FBBF24" font-family="Urbanist,sans-serif" font-size="11" font-weight="700">8</text>
+          </g>
+
+          <!-- ==================== SENSOR DOTTED LINES TO ENPACT ==================== -->
+          <g class="sensor-lines" opacity=".35">
+            <!-- S1 → enPact -->
+            <path d="M171,204 L171,440 L260,452" stroke="#FBBF24" stroke-width="1" fill="none" stroke-dasharray="3 4"/>
+            <!-- S2 → enPact -->
+            <path d="M141,358 L141,410 L200,440 L260,452" stroke="#FBBF24" stroke-width="1" fill="none" stroke-dasharray="3 4"/>
+            <!-- S3 → enPact -->
+            <path d="M289,318 L289,440 L340,452 L340,474" stroke="#FBBF24" stroke-width="1" fill="none" stroke-dasharray="3 4"/>
+            <!-- S4 → enPact -->
+            <path d="M70,402 L70,468 L260,468" stroke="#FBBF24" stroke-width="1" fill="none" stroke-dasharray="3 4"/>
+            <!-- S5 → enPact -->
+            <path d="M59,126 L40,126 L40,490 L260,490 L260,474" stroke="#FBBF24" stroke-width="1" fill="none" stroke-dasharray="3 4"/>
+            <!-- S6 → enPact -->
+            <path d="M59,170 L46,170 L46,484 L268,484 L268,474" stroke="#FBBF24" stroke-width="1" fill="none" stroke-dasharray="3 4"/>
+            <!-- S7 → enPact -->
+            <path d="M440,160 L440,440 L400,452 L420,474" stroke="#FBBF24" stroke-width="1" fill="none" stroke-dasharray="3 4"/>
+            <!-- S8 → enPact -->
+            <path d="M636,374 L636,420 L420,460 L420,474" stroke="#FBBF24" stroke-width="1" fill="none" stroke-dasharray="3 4"/>
           </g>
 
           <!-- ==================== enPACT CONTROLLER ==================== -->
           <g id="enpact-ctrl">
-            <rect x="260" y="430" width="160" height="44" rx="8" fill="var(--card)" stroke="rgba(0,230,118,.35)" stroke-width="2" id="enpact-box"/>
-            <text x="340" y="457" text-anchor="middle" fill="#00E676" font-family="Urbanist,sans-serif" font-size="14" font-weight="800" letter-spacing="2">ENPACT</text>
-            <!-- Control line to solenoid -->
-            <path d="M340,430 L340,220 L308,195" stroke="rgba(0,230,118,.25)" stroke-width="1.5" fill="none" stroke-dasharray="4 4" id="ctrl-line-sol"/>
-            <!-- Control line to compressor monitor -->
-            <path d="M420,452 L560,452 L590,390" stroke="rgba(0,230,118,.15)" stroke-width="1" fill="none" stroke-dasharray="3 3" id="ctrl-line-comp"/>
-            <text x="490" y="446" fill="rgba(0,230,118,.35)" font-family="Urbanist,sans-serif" font-size="7" font-weight="600" letter-spacing=".5">CONTROL</text>
+            <rect x="240" y="440" width="200" height="48" rx="10" fill="var(--card)" stroke="rgba(0,230,118,.35)" stroke-width="2" id="enpact-box"/>
+            <text x="340" y="469" text-anchor="middle" fill="#00E676" font-family="Urbanist,sans-serif" font-size="15" font-weight="800" letter-spacing="3">ENPACT</text>
+            <!-- Control line up to solenoid -->
+            <path d="M340,440 L340,228 L330,227" stroke="rgba(0,230,118,.3)" stroke-width="1.5" fill="none" stroke-dasharray="4 4" id="ctrl-line-sol"/>
           </g>
 
-          <!-- ==================== SUPERHEAT GAUGE ==================== -->
-          <g id="sh-gauge-svg" transform="translate(440, 260)">
-            <rect x="-40" y="-45" width="80" height="90" rx="10" fill="var(--card)" stroke="rgba(255,255,255,.08)" stroke-width="1.5" id="sh-bg"/>
-            <text x="0" y="-30" text-anchor="middle" fill="rgba(255,255,255,.35)" font-family="Urbanist,sans-serif" font-size="8" font-weight="700" letter-spacing="1">SUPERHEAT</text>
-            <!-- Gauge bar -->
-            <rect x="-4" y="-20" width="8" height="50" rx="4" fill="rgba(255,255,255,.05)" stroke="rgba(255,255,255,.06)" stroke-width="1"/>
-            <rect x="-3" y="15" width="6" height="14" rx="3" fill="#00E676" id="sh-bar-fill"/>
-            <!-- Value -->
-            <text x="0" y="42" text-anchor="middle" font-family="Urbanist,sans-serif" font-size="16" font-weight="700" fill="#00E676" id="sh-value-svg">5°K</text>
+          <!-- ==================== SENSOR LEGEND PANEL ==================== -->
+          <g transform="translate(500, 440)">
+            <rect x="0" y="0" width="340" height="140" rx="10" fill="var(--card)" stroke="rgba(251,191,36,.15)" stroke-width="1"/>
+            <!-- Header -->
+            <text x="170" y="22" text-anchor="middle" fill="#FBBF24" font-family="Urbanist,sans-serif" font-size="11" font-weight="700" letter-spacing="1.5">SENSOR CONFIGURATION</text>
+            <line x1="16" y1="30" x2="324" y2="30" stroke="rgba(251,191,36,.1)" stroke-width="1"/>
+            <!-- enPact lite column -->
+            <text x="100" y="46" text-anchor="middle" fill="#FBBF24" font-family="Urbanist,sans-serif" font-size="9" font-weight="700" letter-spacing=".5" opacity=".7">enPact lite</text>
+            <!-- enPact full column -->
+            <text x="260" y="46" text-anchor="middle" fill="#FBBF24" font-family="Urbanist,sans-serif" font-size="9" font-weight="700" letter-spacing=".5" opacity=".7">enPact</text>
+            <line x1="170" y1="34" x2="170" y2="136" stroke="rgba(251,191,36,.08)" stroke-width="1"/>
+
+            <!-- Lite: sensors 1-4 -->
+            <text x="20" y="62" fill="#8B95A5" font-family="Instrument Sans,sans-serif" font-size="9"><tspan fill="#FBBF24" font-weight="700">1.</tspan>  Coolant IN</text>
+            <text x="20" y="76" fill="#8B95A5" font-family="Instrument Sans,sans-serif" font-size="9"><tspan fill="#FBBF24" font-weight="700">2.</tspan>  Coolant OUT</text>
+            <text x="20" y="90" fill="#8B95A5" font-family="Instrument Sans,sans-serif" font-size="9"><tspan fill="#FBBF24" font-weight="700">3.</tspan>  Space Air Temp</text>
+            <text x="20" y="104" fill="#8B95A5" font-family="Instrument Sans,sans-serif" font-size="9"><tspan fill="#FBBF24" font-weight="700">4.</tspan>  Product Temp</text>
+
+            <!-- Full: sensors 1-8 -->
+            <text x="182" y="62" fill="#8B95A5" font-family="Instrument Sans,sans-serif" font-size="9"><tspan fill="#FBBF24" font-weight="700">1.</tspan>  Coolant IN</text>
+            <text x="182" y="76" fill="#8B95A5" font-family="Instrument Sans,sans-serif" font-size="9"><tspan fill="#FBBF24" font-weight="700">2.</tspan>  Coolant OUT</text>
+            <text x="182" y="90" fill="#8B95A5" font-family="Instrument Sans,sans-serif" font-size="9"><tspan fill="#FBBF24" font-weight="700">3.</tspan>  Space Air Temp</text>
+            <text x="182" y="104" fill="#8B95A5" font-family="Instrument Sans,sans-serif" font-size="9"><tspan fill="#FBBF24" font-weight="700">4.</tspan>  Product Temp</text>
+            <text x="182" y="118" fill="#8B95A5" font-family="Instrument Sans,sans-serif" font-size="9"><tspan fill="#FBBF24" font-weight="700">5.</tspan>  Door Open</text>
+            <text x="182" y="132" fill="#E8ECF1" font-family="Instrument Sans,sans-serif" font-size="9"><tspan fill="#FBBF24" font-weight="700">6.</tspan>  Space at a Distance</text>
+            <text x="20" y="120" fill="#8B95A5" font-family="Instrument Sans,sans-serif" font-size="9"><tspan fill="#FBBF24" font-weight="700">7.</tspan>  Liquid Line</text>
+            <text x="20" y="134" fill="#8B95A5" font-family="Instrument Sans,sans-serif" font-size="9"><tspan fill="#FBBF24" font-weight="700">8.</tspan>  Compressor</text>
           </g>
 
           <!-- ==================== PIPE LEGEND ==================== -->
-          <g transform="translate(50, 490)" opacity=".5">
+          <g transform="translate(50, 598)" opacity=".5">
             <line x1="0" y1="0" x2="20" y2="0" stroke="#38BDF8" stroke-width="3" stroke-linecap="round"/>
-            <text x="26" y="4" fill="#8B95A5" font-family="Instrument Sans,sans-serif" font-size="8">Cold Refrigerant</text>
-            <line x1="130" y1="0" x2="150" y2="0" stroke="#FBBF24" stroke-width="3" stroke-linecap="round"/>
-            <text x="156" y="4" fill="#8B95A5" font-family="Instrument Sans,sans-serif" font-size="8">Suction Gas</text>
-            <line x1="240" y1="0" x2="260" y2="0" stroke="#F87171" stroke-width="3" stroke-linecap="round"/>
-            <text x="266" y="4" fill="#8B95A5" font-family="Instrument Sans,sans-serif" font-size="8">Hot Gas</text>
-            <line x1="330" y1="0" x2="350" y2="0" stroke="#A78BFA" stroke-width="3" stroke-linecap="round"/>
-            <text x="356" y="4" fill="#8B95A5" font-family="Instrument Sans,sans-serif" font-size="8">Liquid Line</text>
+            <text x="26" y="4" fill="#8B95A5" font-family="Instrument Sans,sans-serif" font-size="9">Cold Refrigerant</text>
+            <line x1="145" y1="0" x2="165" y2="0" stroke="#FBBF24" stroke-width="3" stroke-linecap="round"/>
+            <text x="171" y="4" fill="#8B95A5" font-family="Instrument Sans,sans-serif" font-size="9">Suction Gas</text>
+            <line x1="270" y1="0" x2="290" y2="0" stroke="#F87171" stroke-width="3" stroke-linecap="round"/>
+            <text x="296" y="4" fill="#8B95A5" font-family="Instrument Sans,sans-serif" font-size="9">Hot Gas</text>
+            <line x1="365" y1="0" x2="385" y2="0" stroke="#A78BFA" stroke-width="3" stroke-linecap="round"/>
+            <text x="391" y="4" fill="#8B95A5" font-family="Instrument Sans,sans-serif" font-size="9">Liquid Line</text>
+            <line x1="470" y1="0" x2="490" y2="0" stroke="#FBBF24" stroke-width="1.5" stroke-linecap="round" stroke-dasharray="3 4"/>
+            <text x="496" y="4" fill="#8B95A5" font-family="Instrument Sans,sans-serif" font-size="9">Sensor Return</text>
           </g>
         </svg>
       </div>
@@ -1031,6 +1086,7 @@ reveals.forEach(el => observer.observe(el));
   const pipeB = document.getElementById('pipe-b');  // Evaporator → Compressor (yellow)
   const pipeC = document.getElementById('pipe-c');  // Compressor → Condenser (red)
   const pipeD = document.getElementById('pipe-d');  // Condenser → Solenoid (purple)
+  const pipeE = document.getElementById('pipe-e');  // Solenoid → Expansion (purple link)
 
   // Components
   const solRect = document.getElementById('sol-rect');
@@ -1209,6 +1265,7 @@ reveals.forEach(el => observer.observe(el));
     switch(currentPhase) {
       case 0: // Monitor — everything running, superheat rising
         setPipeFlowing(pipeA, true, '.9');
+        setPipeFlowing(pipeE, true, '.7');
         setPipeFlowing(pipeB, true, '.7');
         setPipeFlowing(pipeC, true, '.7');
         setPipeFlowing(pipeD, true, '.7');
@@ -1226,11 +1283,13 @@ reveals.forEach(el => observer.observe(el));
         const iP = Math.min(phaseProgress * 3, 1);
         if (iP < 0.3) {
           setPipeFlowing(pipeA, true, '.9');
+          setPipeFlowing(pipeE, true, '.7');
           setPipeFlowing(pipeB, true, '.7');
           setPipeFlowing(pipeC, true, '.7');
           setPipeFlowing(pipeD, true, '.7');
         } else {
           setPipeFlowing(pipeA, false);
+          setPipeFlowing(pipeE, false);
           setPipeFlowing(pipeB, false);
           setPipeFlowing(pipeC, false);
           setPipeFlowing(pipeD, false);
@@ -1245,6 +1304,7 @@ reveals.forEach(el => observer.observe(el));
 
       case 2: // Harvest — no flow, evaporator glows, superheat drops
         setPipeFlowing(pipeA, false);
+        setPipeFlowing(pipeE, false);
         setPipeFlowing(pipeB, false);
         setPipeFlowing(pipeC, false);
         setPipeFlowing(pipeD, false);
@@ -1262,11 +1322,13 @@ reveals.forEach(el => observer.observe(el));
         const rP = Math.min(phaseProgress * 2.5, 1);
         if (rP > 0.3) {
           setPipeFlowing(pipeA, true, '.9');
+          setPipeFlowing(pipeE, true, '.7');
           setPipeFlowing(pipeB, true, '.7');
           setPipeFlowing(pipeC, true, '.7');
           setPipeFlowing(pipeD, true, '.7');
         } else {
           setPipeFlowing(pipeA, false);
+          setPipeFlowing(pipeE, false);
           setPipeFlowing(pipeB, false);
           setPipeFlowing(pipeC, false);
           setPipeFlowing(pipeD, false);
