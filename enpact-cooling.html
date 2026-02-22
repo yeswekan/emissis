@@ -137,6 +137,9 @@ section{position:relative;z-index:1;padding:100px 0}
 .sensor-badge{transition:opacity .4s}
 .sensor-badge.pulse rect{animation:sensor-pulse 1.5s ease-in-out infinite}
 @keyframes sensor-pulse{0%,100%{stroke-opacity:.3;fill-opacity:.1}50%{stroke-opacity:.8;fill-opacity:.3}}
+.fan-spin{animation:fan-rotate 1s linear infinite;transform-origin:center}
+.fan-spin.stopped{animation-play-state:paused}
+@keyframes fan-rotate{to{transform:rotate(360deg)}}
 
 /* Phase info panel - full width below diagram */
 .ors-info-full{display:grid;grid-template-columns:1fr 1fr;gap:24px;max-width:880px;margin:0 auto}
@@ -557,12 +560,11 @@ footer{background:var(--bg);border-top:1px solid var(--brd);padding:48px 0 24px}
           <!-- Fan (outdoor) -->
           <g id="outdoor-fan" transform="translate(590, 245)">
             <circle cx="0" cy="0" r="20" fill="rgba(255,255,255,.03)" stroke="rgba(255,255,255,.08)" stroke-width="1"/>
-            <g id="fan-blades-outdoor">
+            <g id="fan-blades-outdoor" class="fan-spin">
               <path d="M0,-14 Q8,-4 0,0 Q-8,-4 0,-14Z" fill="rgba(255,255,255,.25)"/>
               <path d="M12,7 Q4,12 0,0 Q8,2 12,7Z" fill="rgba(255,255,255,.25)"/>
               <path d="M-12,7 Q-4,12 0,0 Q-8,2 -12,7Z" fill="rgba(255,255,255,.25)"/>
             </g>
-            <animateTransform xlink:href="#fan-blades-outdoor" attributeName="transform" type="rotate" from="0" to="360" dur="1s" repeatCount="indefinite"/>
             <text x="0" y="34" text-anchor="middle" fill="rgba(255,255,255,.3)" font-family="Urbanist,sans-serif" font-size="8" font-weight="600">FAN</text>
           </g>
 
@@ -1104,6 +1106,7 @@ reveals.forEach(el => observer.observe(el));
   const evapCoilBg = document.getElementById('evap-coil-bg');
   const indoorBox = document.getElementById('indoor-box');
   const outdoorBox = document.getElementById('outdoor-box');
+  const outdoorFanBlades = document.getElementById('fan-blades-outdoor');
 
   const shBarFill = document.getElementById('sh-bar-fill');
   const shValueSvg = document.getElementById('sh-value-svg');
@@ -1179,6 +1182,8 @@ reveals.forEach(el => observer.observe(el));
       compLabelSvg.setAttribute('fill', '#00E676');
       compStatusSvg.textContent = 'RUNNING';
       compStatusSvg.setAttribute('fill', 'rgba(0,230,118,.6)');
+      // Resume outdoor fan
+      outdoorFanBlades.classList.remove('stopped');
     } else {
       compCircle.setAttribute('stroke', 'rgba(239,68,68,.4)');
       compInner.setAttribute('stroke', 'rgba(239,68,68,.15)');
@@ -1187,6 +1192,8 @@ reveals.forEach(el => observer.observe(el));
       compLabelSvg.setAttribute('fill', '#EF4444');
       compStatusSvg.textContent = 'HALTED';
       compStatusSvg.setAttribute('fill', 'rgba(239,68,68,.6)');
+      // Stop outdoor fan
+      outdoorFanBlades.classList.add('stopped');
     }
   }
 
