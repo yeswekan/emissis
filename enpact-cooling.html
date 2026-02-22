@@ -132,12 +132,14 @@ section{position:relative;z-index:1;padding:100px 0}
 .ors-visual-full{width:100%;max-width:880px;margin:0 auto;position:relative}
 .schematic-svg{width:100%;height:auto;display:block}
 .pipe-animated{transition:opacity .6s ease, stroke .6s ease}
+.pipe-flow-anim{animation:pipe-dash 0.8s linear infinite}
+@keyframes pipe-dash{to{stroke-dashoffset:-24}}
 .pipe-animated.stopped{animation:none!important}
 .pipe-animated.stopped animate{animation-play-state:paused}
 .sensor-badge{transition:opacity .4s}
 .sensor-badge.pulse rect{animation:sensor-pulse 1.5s ease-in-out infinite}
 @keyframes sensor-pulse{0%,100%{stroke-opacity:.3;fill-opacity:.1}50%{stroke-opacity:.8;fill-opacity:.3}}
-.fan-spin{animation:fan-rotate 1s linear infinite;transform-box:fill-box;transform-origin:center}
+.fan-spin{animation:fan-rotate 1s linear infinite;transform-origin:0px 0px}
 .fan-spin.stopped{animation-play-state:paused}
 .fan-blade-out{transition:fill .5s ease}
 @keyframes fan-rotate{to{transform:rotate(360deg)}}
@@ -472,25 +474,15 @@ footer{background:var(--bg);border-top:1px solid var(--brd);padding:48px 0 24px}
 
           <!-- ==================== REFRIGERANT PIPES (animated flow) ==================== -->
           <!-- Pipe A: Expansion Valve → Evaporator (cyan) -->
-          <path d="M215,195 L120,195 L120,240" stroke="#38BDF8" stroke-width="4" fill="none" stroke-linecap="round" stroke-linejoin="round" stroke-dasharray="10 14" opacity=".9" id="pipe-a" class="pipe-animated">
-            <animate attributeName="stroke-dashoffset" from="0" to="-24" dur="0.8s" repeatCount="indefinite"/>
-          </path>
+          <path d="M215,195 L120,195 L120,240" stroke="#38BDF8" stroke-width="4" fill="none" stroke-linecap="round" stroke-linejoin="round" stroke-dasharray="10 14" opacity=".9" id="pipe-a" class="pipe-animated pipe-flow-anim"/>
           <!-- Pipe E: Solenoid → Expansion Valve (purple) — THE MISSING LINK -->
-          <path d="M308,195 L248,195" stroke="#A78BFA" stroke-width="4" fill="none" stroke-linecap="round" stroke-linejoin="round" stroke-dasharray="10 14" opacity=".7" id="pipe-e" class="pipe-animated">
-            <animate attributeName="stroke-dashoffset" from="0" to="-24" dur="0.8s" repeatCount="indefinite"/>
-          </path>
+          <path d="M308,195 L248,195" stroke="#A78BFA" stroke-width="4" fill="none" stroke-linecap="round" stroke-linejoin="round" stroke-dasharray="10 14" opacity=".7" id="pipe-e" class="pipe-animated pipe-flow-anim"/>
           <!-- Pipe B: Evaporator → Compressor (yellow) -->
-          <path d="M120,310 L120,370 L560,370" stroke="#FBBF24" stroke-width="4" fill="none" stroke-linecap="round" stroke-linejoin="round" stroke-dasharray="10 14" opacity=".7" id="pipe-b" class="pipe-animated">
-            <animate attributeName="stroke-dashoffset" from="0" to="-24" dur="0.8s" repeatCount="indefinite"/>
-          </path>
+          <path d="M120,310 L120,370 L560,370" stroke="#FBBF24" stroke-width="4" fill="none" stroke-linecap="round" stroke-linejoin="round" stroke-dasharray="10 14" opacity=".7" id="pipe-b" class="pipe-animated pipe-flow-anim"/>
           <!-- Pipe C: Compressor → Condenser (red) -->
-          <path d="M620,370 L720,370 L720,270" stroke="#F87171" stroke-width="4" fill="none" stroke-linecap="round" stroke-linejoin="round" stroke-dasharray="10 14" opacity=".7" id="pipe-c" class="pipe-animated">
-            <animate attributeName="stroke-dashoffset" from="0" to="-24" dur="0.8s" repeatCount="indefinite"/>
-          </path>
+          <path d="M620,370 L720,370 L720,270" stroke="#F87171" stroke-width="4" fill="none" stroke-linecap="round" stroke-linejoin="round" stroke-dasharray="10 14" opacity=".7" id="pipe-c" class="pipe-animated pipe-flow-anim"/>
           <!-- Pipe D: Condenser → Solenoid (purple) -->
-          <path d="M720,200 L720,155 L440,155 L440,195 L352,195" stroke="#A78BFA" stroke-width="4" fill="none" stroke-linecap="round" stroke-linejoin="round" stroke-dasharray="10 14" opacity=".7" id="pipe-d" class="pipe-animated">
-            <animate attributeName="stroke-dashoffset" from="0" to="-24" dur="0.8s" repeatCount="indefinite"/>
-          </path>
+          <path d="M720,200 L720,155 L440,155 L440,195 L352,195" stroke="#A78BFA" stroke-width="4" fill="none" stroke-linecap="round" stroke-linejoin="round" stroke-dasharray="10 14" opacity=".7" id="pipe-d" class="pipe-animated pipe-flow-anim"/>
 
           <!-- ==================== EVAPORATOR COIL ==================== -->
           <g id="evap-group">
@@ -581,8 +573,8 @@ footer{background:var(--bg);border-top:1px solid var(--brd);padding:48px 0 24px}
             <circle cx="0" cy="0" r="18" fill="none" stroke="rgba(0,230,118,.15)" stroke-width="1" id="comp-inner"/>
             <line x1="-8" y1="-6" x2="8" y2="6" stroke="#00E676" stroke-width="2.5" stroke-linecap="round" opacity=".8" id="comp-piston"/>
             <circle cx="0" cy="0" r="4" fill="#00E676" opacity=".6" id="comp-center-dot"/>
-            <text x="42" y="-2" text-anchor="start" fill="#00E676" font-family="Urbanist,sans-serif" font-size="11" font-weight="700" letter-spacing=".5" id="comp-label-svg">COMPRESSOR</text>
-            <text x="42" y="10" text-anchor="start" font-family="Urbanist,sans-serif" font-size="9" font-weight="600" id="comp-status-svg" fill="rgba(0,230,118,.6)">RUNNING</text>
+            <text x="0" y="-40" text-anchor="middle" fill="#00E676" font-family="Urbanist,sans-serif" font-size="11" font-weight="700" letter-spacing=".5" id="comp-label-svg">COMPRESSOR</text>
+            <text x="0" y="-30" text-anchor="middle" font-family="Urbanist,sans-serif" font-size="9" font-weight="600" id="comp-status-svg" fill="rgba(0,230,118,.6)">RUNNING</text>
           </g>
 
           <!-- ==================== SUPERHEAT GAUGE ==================== -->
@@ -1149,8 +1141,10 @@ reveals.forEach(el => observer.observe(el));
   function setPipeFlowing(pipe, flowing, baseOpacity) {
     if (flowing) {
       pipe.style.opacity = baseOpacity || '';
+      pipe.classList.add('pipe-flow-anim');
     } else {
       pipe.style.opacity = '0.1';
+      pipe.classList.remove('pipe-flow-anim');
     }
   }
 
