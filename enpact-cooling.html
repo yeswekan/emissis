@@ -302,6 +302,19 @@ footer{background:var(--bg);border-top:1px solid var(--brd);padding:48px 0 24px}
 .energy-saved-bar{margin-top:12px;height:6px;border-radius:3px;background:rgba(255,255,255,.04);overflow:hidden}
 .energy-saved-fill{height:100%;border-radius:3px;background:linear-gradient(90deg,var(--acc2),var(--acc));transition:width 1s ease;width:0%}
 
+/* Hamburger menu */
+.hamburger{display:none;flex-direction:column;gap:5px;cursor:pointer;padding:8px;margin-right:-8px;z-index:1002;background:none;border:none}
+.hamburger span{display:block;width:22px;height:2px;background:var(--t1);border-radius:2px;transition:all .3s ease}
+.hamburger.active span:nth-child(1){transform:rotate(45deg) translate(5px,5px)}
+.hamburger.active span:nth-child(2){opacity:0}
+.hamburger.active span:nth-child(3){transform:rotate(-45deg) translate(5px,-5px)}
+.mobile-overlay{display:none;position:fixed;inset:0;background:rgba(7,9,13,.95);backdrop-filter:blur(24px);-webkit-backdrop-filter:blur(24px);z-index:999;align-items:center;justify-content:center;opacity:0;transition:opacity .3s ease}
+.mobile-overlay.active{display:flex;opacity:1}
+.mobile-nav{display:flex;flex-direction:column;align-items:center;gap:28px;list-style:none}
+.mobile-nav a{color:var(--t1);text-decoration:none;font-family:var(--df);font-size:24px;font-weight:600;letter-spacing:-.5px;transition:color .3s}
+.mobile-nav a:hover{color:var(--acc)}
+.mobile-nav .nav-cta{font-size:14px!important;padding:14px 32px!important;margin-top:12px}
+
 /* Scroll animations */
 .reveal{opacity:0;transform:translateY(28px);transition:all .7s cubic-bezier(.16,1,.3,1)}
 .reveal.visible{opacity:1;transform:translateY(0)}
@@ -322,6 +335,7 @@ footer{background:var(--bg);border-top:1px solid var(--brd);padding:48px 0 24px}
 @media(max-width:768px){
   .container{padding:0 24px}
   .nav-links{display:none}
+  .hamburger{display:flex}
   section{padding:72px 0}
   .benefits-grid{grid-template-columns:1fr}
   .specs-grid{grid-template-columns:1fr}
@@ -348,8 +362,21 @@ footer{background:var(--bg);border-top:1px solid var(--brd);padding:48px 0 24px}
       <li><a href="#case-studies">Case Studies</a></li>
       <li><a href="#contact" class="nav-cta">Get Started</a></li>
     </ul>
+    <button class="hamburger" id="hamburger" aria-label="Menu">
+      <span></span><span></span><span></span>
+    </button>
   </div>
 </nav>
+<div class="mobile-overlay" id="mobile-overlay">
+  <ul class="mobile-nav">
+    <li><a href="index.html" class="mobile-link">← Home</a></li>
+    <li><a href="#ors-animation" class="mobile-link">ORS Technology</a></li>
+    <li><a href="#how-it-works" class="mobile-link">How It Works</a></li>
+    <li><a href="#applications" class="mobile-link">Applications</a></li>
+    <li><a href="#case-studies" class="mobile-link">Case Studies</a></li>
+    <li><a href="#contact" class="nav-cta mobile-link">Get Started</a></li>
+  </ul>
+</div>
 
 <!-- HERO -->
 <section class="tech-hero">
@@ -979,6 +1006,22 @@ reveals.forEach(el => observer.observe(el));
   }, { threshold: 0.2 });
   orsObserver.observe(orsSection);
 })();
+
+// Hamburger menu
+const hamburger = document.getElementById('hamburger');
+const overlay = document.getElementById('mobile-overlay');
+hamburger.addEventListener('click', () => {
+  hamburger.classList.toggle('active');
+  overlay.classList.toggle('active');
+  document.body.style.overflow = overlay.classList.contains('active') ? 'hidden' : '';
+});
+document.querySelectorAll('.mobile-link').forEach(link => {
+  link.addEventListener('click', () => {
+    hamburger.classList.remove('active');
+    overlay.classList.remove('active');
+    document.body.style.overflow = '';
+  });
+});
 </script>
 </body>
 </html>
